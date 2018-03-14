@@ -1,12 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class AgentMove : MonoBehaviour
 {
     NavMeshAgent agent;
+    public NavMeshAgent Agent
+    {
+        get { return agent; }
+    }
     Animator animator;
+    public Animator Animator
+    {
+        get { return animator; }
+    }
 
     public Transform goal;
 	void Start ()

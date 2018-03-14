@@ -10,6 +10,8 @@ public class EnemyBehaviours : MonoBehaviour
 
     int patrolIndex;
 
+    public bool takeCover;
+
     private void Start()
     {
         controller = GetComponent<AgentMove>();
@@ -18,9 +20,21 @@ public class EnemyBehaviours : MonoBehaviour
 
     private void Update()
     {
-        if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+        if (takeCover)
         {
-            ChooseNextPatrolPosition();
+            if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+            {
+                controller.Agent.isStopped = true;
+                controller.Animator.SetBool("Crouch", true);
+            }
+        }
+        else
+        {
+            controller.Agent.isStopped = false;
+            if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+            {
+                ChooseNextPatrolPosition();
+            }
         }
     }
 
