@@ -8,7 +8,9 @@ public enum EnemyState
     Patrol,
     Sneak,
     Cover,
-    TakingCover
+    TakingCover,
+    CoverShooting,
+    Shooting
 }
 
 public class EnemyBehaviours : MonoBehaviour
@@ -22,6 +24,11 @@ public class EnemyBehaviours : MonoBehaviour
     }
     
     AgentMove controller;
+
+    bool gunShown;
+    public MeshRenderer gunRenderer;
+
+    public Transform target;
 
     public Transform[] patrolPositions;
     int patrolIndex;
@@ -37,16 +44,28 @@ public class EnemyBehaviours : MonoBehaviour
         switch (state)
         {
             case EnemyState.Idle:
+                if (gunShown)
+                    StartCoroutine(DissolveOut());
+                gunShown = false;
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", false);
+                controller.Animator.SetBool("Shoot", false);
                 break;
             case EnemyState.Cover:
+                if (gunShown)
+                    StartCoroutine(DissolveOut());
+                gunShown = false;
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", true);
+                controller.Animator.SetBool("Shoot", false);
                 break;
             case EnemyState.TakingCover:
+                if (gunShown)
+                    StartCoroutine(DissolveOut());
+                gunShown = false;
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
+                controller.Animator.SetBool("Shoot", false);
                 if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
                 {
                     controller.Agent.isStopped = true;
@@ -55,20 +74,39 @@ public class EnemyBehaviours : MonoBehaviour
                 }
                 break;
             case EnemyState.Patrol:
+                if (gunShown)
+                    StartCoroutine(DissolveOut());
+                gunShown = false;
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
+                controller.Animator.SetBool("Shoot", false);
                 if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
                 {
                     ChooseNextPatrolPosition();
                 }
                 break;
             case EnemyState.Sneak:
+                if (gunShown)
+                    StartCoroutine(DissolveOut());
+                gunShown = false;
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", true);
+                controller.Animator.SetBool("Shoot", false);
                 if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
                 {
                     ChooseNextPatrolPosition();
                 }
+                break;
+            case EnemyState.Shooting:
+                controller.Agent.isStopped = true;
+                controller.Animator.SetBool("Crouch", false);
+                controller.Animator.SetBool("Shoot", true);
+                ShootTarget();
+                break;
+            case EnemyState.CoverShooting:
+                controller.Agent.isStopped = true;
+                controller.Animator.SetBool("Crouch", true);
+                controller.Animator.SetBool("Shoot", true);
                 break;
         }
     }
@@ -83,6 +121,34 @@ public class EnemyBehaviours : MonoBehaviour
         {
             patrolIndex = 0;
             controller.goal = patrolPositions[patrolIndex];
+        }
+    }
+
+    void ShootTarget()
+    {
+        if (!gunShown)
+        {
+            StartCoroutine(DissolveIn());
+        }
+        gunShown = true;
+        transform.rotation = Quaternion.Euler(transform.rotation.x, Quaternion.LookRotation(-target.position, Vector3.up).eulerAngles.y, transform.rotation.z);
+    }
+    
+    IEnumerator DissolveOut()
+    {
+        for (float i = 0f; i <= 1f; i += 0.02f)
+        {
+            gunRenderer.material.SetFloat("_SliceAmount", i);
+            yield return new WaitForSeconds(0.002f);
+        }
+    }
+
+    IEnumerator DissolveIn()
+    {
+        for (float i = 1f; i >= -0.1f; i -= 0.02f)
+        {
+            gunRenderer.material.SetFloat("_SliceAmount", i);
+            yield return new WaitForSeconds(0.002f);
         }
     }
 }
