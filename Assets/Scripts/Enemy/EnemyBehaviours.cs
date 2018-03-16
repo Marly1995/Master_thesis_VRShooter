@@ -27,11 +27,17 @@ public class EnemyBehaviours : MonoBehaviour
 
     bool gunShown;
     public MeshRenderer gunRenderer;
+    public Transform barrell;
+    public GameObject hitParticles;
+    public GameObject hitTrail;
 
     public Transform target;
 
     public Transform[] patrolPositions;
     int patrolIndex;
+
+    public float fireRate;
+    float shotTime;
 
     private void Start()
     {
@@ -126,12 +132,34 @@ public class EnemyBehaviours : MonoBehaviour
 
     void ShootTarget()
     {
+        shotTime -= Time.deltaTime;
         if (!gunShown)
         {
             StartCoroutine(DissolveIn());
         }
         gunShown = true;
         transform.rotation = Quaternion.Euler(transform.rotation.x, Quaternion.LookRotation(-target.position, Vector3.up).eulerAngles.y, transform.rotation.z);
+
+        if (shotTime <= 0f)
+        {
+            Vector3 shotDir = (target.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), Random.Range(-2f, 2f))) - barrell.position;
+            Ray ray = new Ray(barrell.position, shotDir); ;
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject particles = Instantiate(hitParticles, hit.point, Quaternion.identity);
+                Destroy(particles, 0.4f);
+                if (hit.collider.tag == "Enemy")
+                {
+                    //hit.collider.gameObject.GetComponent<EnemyDie>().Die();
+                }
+            }
+            GameObject trail = Instantiate(hitTrail);
+            VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
+            vol.StartPos = barrell.position;
+            vol.EndPos = hit.point;
+            shotTime = fireRate;
+        }
     }
     
     IEnumerator DissolveOut()
