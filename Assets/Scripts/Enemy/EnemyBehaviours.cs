@@ -33,6 +33,9 @@ public class EnemyBehaviours : MonoBehaviour
 
     public Transform target;
 
+    public Transform[] coverPositions;
+    bool hasCoverPoint = false;
+
     public Transform[] patrolPositions;
     int patrolIndex;
 
@@ -72,10 +75,13 @@ public class EnemyBehaviours : MonoBehaviour
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
                 controller.Animator.SetBool("Shoot", false);
+                if (!hasCoverPoint)
+                { TakeCover(); }
                 if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
                 {
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Crouch", true);
+                    hasCoverPoint = false;
                     state = EnemyState.Cover;
                 }
                 break;
@@ -130,6 +136,24 @@ public class EnemyBehaviours : MonoBehaviour
         }
     }
 
+    void TakeCover()
+    {
+        float shortest = Mathf.Infinity;
+        int index = 0;
+        for (int i = 0; i < coverPositions.Length; i++)
+        {
+            float dist = Vector3.Distance(transform.position, coverPositions[i].position);
+            Debug.Log(dist);
+            if (dist < shortest)
+            {
+                index = i;
+                shortest = dist;
+            }
+        }
+        controller.goal = coverPositions[index];
+        hasCoverPoint = true;
+    }
+
     void ShootTarget()
     {
         shotTime -= Time.deltaTime;
@@ -143,7 +167,7 @@ public class EnemyBehaviours : MonoBehaviour
         if (shotTime <= 0f)
         {
             Vector3 shotDir = (target.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), Random.Range(-2f, 2f))) - barrell.position;
-            Ray ray = new Ray(barrell.position, shotDir); ;
+            Ray ray = new Ray(barrell.position, shotDir);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
