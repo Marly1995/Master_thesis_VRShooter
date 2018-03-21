@@ -7,15 +7,10 @@ public class HighlightModel : MonoBehaviour
     [Range(0, 1)]
     public float highlightIntensity;
 
-    SkinnedMeshRenderer mr;
-
-    private void Start()
-    {
-        mr = GetComponent<SkinnedMeshRenderer>();
-    }
+    public Material mat;
 
     private void Update()
     {
-        mr.sharedMaterial.SetFloat("_GlobalXRayVisibility", highlightIntensity);
+        mat.SetFloat("GlobalEnemyXRay", highlightIntensity);
     }
 }

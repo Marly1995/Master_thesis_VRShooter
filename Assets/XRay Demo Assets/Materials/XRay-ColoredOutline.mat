@@ -10,14 +10,14 @@ Material:
   m_Shader: {fileID: 4800000, guid: ffb57f77504d1d24eb8c21861da7f082, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Floats: []
+    serializedVersion: 2
+    m_TexEnvs: {}
+    m_Floats: {}
     m_Colors:
-    - _EdgeColor: {r: 1, g: 0.2783019, b: 0.55425483, a: 1}
+      data:
+        first:
+          name: _EdgeColor
+        second: {r: 1, g: 1, b: 1, a: 1}

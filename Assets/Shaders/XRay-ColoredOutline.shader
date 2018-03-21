@@ -10,7 +10,6 @@ Shader "XRay Shaders/ColoredOutline"
 
 	SubShader
 	{
-
 		Tags
 		{
 			"Queue" = "Transparent"
@@ -57,13 +56,13 @@ Shader "XRay Shaders/ColoredOutline"
 				return o;
 			}
 
-			uniform float _GlobalXRayVisibility;
 			float4 _EdgeColor;
+			uniform float GlobalEnemyXRay;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				float NdotV = 1 - dot(i.normal, i.viewDir) * 1.2;
-				return _EdgeColor * NdotV * _GlobalXRayVisibility;
+				float NdotV = 1 - dot(i.normal, i.viewDir) * 1.5;
+				return _EdgeColor * NdotV * GlobalEnemyXRay;
 			}
 
 			ENDCG
