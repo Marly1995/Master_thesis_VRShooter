@@ -23,7 +23,7 @@ public class AgentMove : MonoBehaviour
 
     private void Update()
     {
-        agent.SetDestination(goal.position);
+       // agent.SetDestination(goal.position);
         animator.SetFloat("Forward", agent.velocity.magnitude);
     }
 }

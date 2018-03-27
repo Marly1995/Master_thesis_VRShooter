@@ -23,6 +23,8 @@ public class EnemyBehaviours : MonoBehaviour
         get { return state; }
         set { state = value; }
     }
+
+    public EnemyStatemanager manager;
     
     AgentMove controller;
 
@@ -32,9 +34,8 @@ public class EnemyBehaviours : MonoBehaviour
     public GameObject hitParticles;
     public GameObject hitTrail;
 
-    public Transform target;
+    Transform target;
 
-    public Transform[] coverPositions;
     bool hasCoverPoint = false;
 
     public Transform[] patrolPositions;
@@ -43,8 +44,13 @@ public class EnemyBehaviours : MonoBehaviour
     public float fireRate;
     float shotTime;
 
+    public SkinnedMeshRenderer robotRenderer;
+    float deathtime = 2.0f;
+    bool dead;
+
     private void Start()
     {
+        robotRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         controller = GetComponent<AgentMove>();
         ChooseNextPatrolPosition();
     }
@@ -55,7 +61,7 @@ public class EnemyBehaviours : MonoBehaviour
         {
             case EnemyState.Idle:
                 if (gunShown)
-                    StartCoroutine(DissolveOut());
+                    StartCoroutine(DissolveGunOut());
                 gunShown = false;
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", false);
@@ -63,7 +69,7 @@ public class EnemyBehaviours : MonoBehaviour
                 break;
             case EnemyState.Cover:
                 if (gunShown)
-                    StartCoroutine(DissolveOut());
+                    StartCoroutine(DissolveGunOut());
                 gunShown = false;
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", true);
@@ -71,7 +77,7 @@ public class EnemyBehaviours : MonoBehaviour
                 break;
             case EnemyState.TakingCover:
                 if (gunShown)
-                    StartCoroutine(DissolveOut());
+                    StartCoroutine(DissolveGunOut());
                 gunShown = false;
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
@@ -88,7 +94,7 @@ public class EnemyBehaviours : MonoBehaviour
                 break;
             case EnemyState.Patrol:
                 if (gunShown)
-                    StartCoroutine(DissolveOut());
+                    StartCoroutine(DissolveGunOut());
                 gunShown = false;
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
@@ -100,7 +106,7 @@ public class EnemyBehaviours : MonoBehaviour
                 break;
             case EnemyState.Sneak:
                 if (gunShown)
-                    StartCoroutine(DissolveOut());
+                    StartCoroutine(DissolveGunOut());
                 gunShown = false;
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", true);
@@ -122,8 +128,9 @@ public class EnemyBehaviours : MonoBehaviour
                 controller.Animator.SetBool("Shoot", true);
                 break;
             case EnemyState.Dead:
-                controller.Agent.isStopped = true;
-                controller.Animator.SetBool("Dead", true);
+                    controller.Agent.isStopped = true;
+                    controller.Animator.SetBool("Dead", true);
+                    Die();
                 break;
         }
     }
@@ -143,20 +150,12 @@ public class EnemyBehaviours : MonoBehaviour
 
     void TakeCover()
     {
-        float shortest = Mathf.Infinity;
-        int index = 0;
-        for (int i = 0; i < coverPositions.Length; i++)
+        Transform coverpoint = manager.SearchForCover(transform.position);
+        if (coverpoint != null)
         {
-            float dist = Vector3.Distance(transform.position, coverPositions[i].position);
-            Debug.Log(dist);
-            if (dist < shortest)
-            {
-                index = i;
-                shortest = dist;
-            }
+            controller.goal = coverpoint;
+            hasCoverPoint = true;
         }
-        controller.goal = coverPositions[index];
-        hasCoverPoint = true;
     }
 
     void ShootTarget()
@@ -164,34 +163,49 @@ public class EnemyBehaviours : MonoBehaviour
         shotTime -= Time.deltaTime;
         if (!gunShown)
         {
-            StartCoroutine(DissolveIn());
+            StartCoroutine(DissolveGunIn());
         }
         gunShown = true;
-        transform.rotation = Quaternion.Euler(transform.rotation.x, Quaternion.LookRotation(-target.position, Vector3.up).eulerAngles.y, transform.rotation.z);
 
-        if (shotTime <= 0f)
+        target = manager.SearchForTarget(transform.position);
+
+        if (target != null)
         {
-            Vector3 shotDir = (target.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), Random.Range(-2f, 2f))) - barrell.position;
-            Ray ray = new Ray(barrell.position, shotDir);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            transform.rotation = Quaternion.Euler(transform.rotation.x, Quaternion.LookRotation(-target.position, Vector3.up).eulerAngles.y, transform.rotation.z);
+            if (shotTime <= 0f)
             {
-                GameObject particles = Instantiate(hitParticles, hit.point, Quaternion.identity);
-                Destroy(particles, 0.4f);
-                if (hit.collider.tag == "Enemy")
+                Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f))) - barrell.position;
+                Ray ray = new Ray(barrell.position, shotDir);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
                 {
-                    //hit.collider.gameObject.GetComponent<EnemyDie>().Die();
+                    GameObject particles = Instantiate(hitParticles, hit.point, Quaternion.identity);
+                    Destroy(particles, 0.4f);
+                    if (hit.collider.tag == "Enemy")
+                    {
+                        //hit.collider.gameObject.GetComponent<EnemyDie>().Die();
+                    }
                 }
+                GameObject trail = Instantiate(hitTrail);
+                VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
+                vol.StartPos = barrell.position;
+                vol.EndPos = hit.point;
+                shotTime = fireRate;
             }
-            GameObject trail = Instantiate(hitTrail);
-            VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
-            vol.StartPos = barrell.position;
-            vol.EndPos = hit.point;
-            shotTime = fireRate;
+        }
+    }
+
+    void Die()
+    {
+        deathtime -= Time.deltaTime;
+        if (!dead)
+        {
+            if (deathtime <= 0f)
+            { StartCoroutine(DissolvePlayerOut()); dead = true; }
         }
     }
     
-    IEnumerator DissolveOut()
+    IEnumerator DissolveGunOut()
     {
         for (float i = 0f; i <= 1f; i += 0.02f)
         {
@@ -200,12 +214,22 @@ public class EnemyBehaviours : MonoBehaviour
         }
     }
 
-    IEnumerator DissolveIn()
+    IEnumerator DissolveGunIn()
     {
         for (float i = 1f; i >= -0.1f; i -= 0.02f)
         {
             gunRenderer.material.SetFloat("_SliceAmount", i);
             yield return new WaitForSeconds(0.002f);
         }
+    }
+
+    IEnumerator DissolvePlayerOut()
+    {
+        for (float i = 0f; i <= 1f; i += 0.02f)
+        {
+            robotRenderer.material.SetFloat("_SliceAmount", i);
+            yield return new WaitForSeconds(0.002f);
+        }
+        Destroy(gameObject);
     }
 }
