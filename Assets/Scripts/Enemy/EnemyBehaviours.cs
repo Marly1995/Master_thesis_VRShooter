@@ -10,7 +10,8 @@ public enum EnemyState
     Cover,
     TakingCover,
     CoverShooting,
-    Shooting
+    Shooting,
+    Dead
 }
 
 public class EnemyBehaviours : MonoBehaviour
@@ -119,6 +120,10 @@ public class EnemyBehaviours : MonoBehaviour
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", true);
                 controller.Animator.SetBool("Shoot", true);
+                break;
+            case EnemyState.Dead:
+                controller.Agent.isStopped = true;
+                controller.Animator.SetBool("Dead", true);
                 break;
         }
     }
