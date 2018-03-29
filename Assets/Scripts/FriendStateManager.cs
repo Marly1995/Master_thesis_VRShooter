@@ -7,6 +7,9 @@ public class FriendStateManager : MonoBehaviour
     public EnemyBehaviours[] targets;
     public Transform player;
 
+    int playerCoverIndex;
+
+    public GameObject[] teleportPoints;
     public Transform[] coverPositions;
     public bool[] coverTaken;
 
@@ -20,20 +23,20 @@ public class FriendStateManager : MonoBehaviour
     {
         Transform newTarget = null;
         float closest = Mathf.Infinity;
-        foreach (FriendlyBehaviour tar in targets)
+        foreach (EnemyBehaviours tar in targets)
         {
             float dist = Vector3.Distance(tar.transform.position, position);
             if (dist < closest && dist < sightRadius)
             {
-                if (tar.State == FriendState.Sneak ||
-                    tar.State == FriendState.Cover)
+                if (tar.State == EnemyState.Sneak ||
+                    tar.State == EnemyState.Cover)
                 {
                     if (dist < hiddenSightRadius)
                     {
                         ray = new Ray(transform.position, tar.transform.position);
                         if (Physics.Raycast(ray, out hit))
                         {
-                            if (hit.collider.tag == "Friendly")
+                            if (hit.collider.tag == "Enemy")
                             {
                                 closest = dist;
                                 newTarget = tar.transform;
@@ -46,7 +49,7 @@ public class FriendStateManager : MonoBehaviour
                     ray = new Ray(transform.position, tar.transform.position);
                     if (Physics.Raycast(ray, out hit))
                     {
-                        if (hit.collider.tag == "Friendly")
+                        if (hit.collider.tag == "Enemy")
                         {
                             closest = dist;
                             newTarget = tar.transform;
@@ -56,6 +59,12 @@ public class FriendStateManager : MonoBehaviour
             }
         }
         return newTarget;
+    }
+
+    public void UpdateCoverPoints(int index)
+    {
+        coverPositions = teleportPoints[index].GetComponentsInChildren<Transform>();
+        coverTaken = new bool[coverPositions.Length];
     }
 
     public Transform SearchForCover(Vector3 position)
