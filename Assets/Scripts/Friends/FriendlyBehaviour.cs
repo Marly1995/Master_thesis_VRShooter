@@ -10,7 +10,8 @@ public enum FriendState
     TakingCover,
     CoverShooting,
     Shooting,
-    Dead
+    Downed,
+    Reviving
 }
 
 public class FriendlyBehaviour : MonoBehaviour
@@ -24,6 +25,7 @@ public class FriendlyBehaviour : MonoBehaviour
     }
 
     AgentMove controller;
+    FriendStateManager manager;
 
     bool gunShown;
     public MeshRenderer gunRenderer;
@@ -41,11 +43,14 @@ public class FriendlyBehaviour : MonoBehaviour
 
     public float fireRate;
     float shotTime;
+    
+    public bool CeaseFire { get; set; }
+
+    bool startedReviving = false;
 
     private void Start()
     {
         controller = GetComponent<AgentMove>();
-        ChooseNextPatrolPosition();
     }
 
     private void Update()
@@ -77,12 +82,19 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Animator.SetBool("Shoot", false);
                 if (!hasCoverPoint)
                 { TakeCover(); }
-                if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+                if (Vector3.Distance(transform.position, controller.goal.position) <= 1f)
                 {
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Crouch", true);
-                    hasCoverPoint = false;
-                    state = FriendState.Cover;
+                    hasCoverPoint = true;
+                    if (CeaseFire)
+                    {
+                        state = FriendState.Cover;
+                    }
+                    else
+                    {
+                        state = FriendState.CoverShooting;
+                    }
                 }
                 break;
             case FriendState.Sneak:
@@ -92,9 +104,12 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", true);
                 controller.Animator.SetBool("Shoot", false);
-                if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+                if (Vector3.Distance(transform.position, controller.goal.position) <= 1f)
                 {
-                    ChooseNextPatrolPosition();
+                    controller.Agent.isStopped = true;
+                    controller.Animator.SetBool("Crouch", true);
+                    hasCoverPoint = true;
+                    state = FriendState.Cover;
                 }
                 break;
             case FriendState.Shooting:
@@ -108,42 +123,49 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Animator.SetBool("Crouch", true);
                 controller.Animator.SetBool("Shoot", true);
                 break;
-            case FriendState.Dead:
+            case FriendState.Downed:
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Dead", true);
                 break;
-        }
-    }
-
-    void ChooseNextPatrolPosition()
-    {
-        if (patrolIndex < patrolPositions.Length)
-        {
-            controller.goal = patrolPositions[patrolIndex++];
-        }
-        else
-        {
-            patrolIndex = 0;
-            controller.goal = patrolPositions[patrolIndex];
+            case FriendState.Reviving:
+                if (gunShown)
+                    StartCoroutine(DissolveOut());
+                gunShown = false;
+                controller.Agent.isStopped = false;
+                controller.Animator.SetBool("Crouch", false);
+                controller.Animator.SetBool("Shoot", false);
+                if (Vector3.Distance(transform.position, controller.goal.position) <= 2f &&
+                    !startedReviving)
+                {
+                    controller.Agent.isStopped = true;
+                    controller.Animator.SetBool("Crouch", true);
+                    Invoke("DoneReviving", 2.0f);
+                    startedReviving = true;
+                }
+                break;
         }
     }
 
     void TakeCover()
     {
-        float shortest = Mathf.Infinity;
-        int index = 0;
-        for (int i = 0; i < coverPositions.Length; i++)
+        Transform coverpoint = manager.SearchForCover(transform.position);
+        if (coverpoint != null)
         {
-            float dist = Vector3.Distance(transform.position, coverPositions[i].position);
-            Debug.Log(dist);
-            if (dist < shortest)
-            {
-                index = i;
-                shortest = dist;
-            }
+            controller.goal = coverpoint;
+            hasCoverPoint = true;
         }
-        controller.goal = coverPositions[index];
-        hasCoverPoint = true;
+    }
+
+    public void Revive(Transform member)
+    {
+        controller.goal = member;
+        state = FriendState.Reviving;
+        startedReviving = false;
+    }
+
+    void DoneReviving()
+    {
+        state = FriendState.TakingCover;
     }
 
     void ShootTarget()
