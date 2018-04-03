@@ -3,6 +3,9 @@ using UnityEngine.AI;
 
 public class AgentMove : MonoBehaviour
 {
+    AudioSource audioSource;
+    public AudioClip footstep;
+
     NavMeshAgent agent;
     public NavMeshAgent Agent
     {
@@ -19,11 +22,22 @@ public class AgentMove : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
 	}
 
+
+    float audioTimer = 0.4f;
+    float audioTime = 0.4f;
     private void Update()
     {
-       // agent.SetDestination(goal.position);
+        audioTimer -= Time.deltaTime;
+        if (audioTimer <= 0f && agent.velocity.magnitude >= 1f)
+        {
+            audioSource.clip = footstep;
+            audioSource.Play();
+            audioTimer = audioTime;
+        }
+
         animator.SetFloat("Forward", agent.velocity.magnitude);
     }
 }

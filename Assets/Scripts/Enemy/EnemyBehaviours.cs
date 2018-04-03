@@ -16,6 +16,9 @@ public enum EnemyState
 
 public class EnemyBehaviours : MonoBehaviour
 {
+    AudioSource audioSource;
+    public AudioClip laserSound;
+
     [SerializeField]
     EnemyState state;
     public EnemyState State
@@ -191,6 +194,8 @@ public class EnemyBehaviours : MonoBehaviour
                 vol.StartPos = barrell.position;
                 vol.EndPos = hit.point;
                 shotTime = fireRate;
+                audioSource.clip = laserSound;
+                audioSource.Play();
             }
         }
     }

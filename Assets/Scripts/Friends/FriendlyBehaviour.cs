@@ -16,6 +16,9 @@ public enum FriendState
 
 public class FriendlyBehaviour : MonoBehaviour
 {
+    AudioSource audioSource;
+    public AudioClip laserSound;
+
     [SerializeField]
     FriendState state;
     public FriendState State
@@ -197,6 +200,8 @@ public class FriendlyBehaviour : MonoBehaviour
             vol.StartPos = barrell.position;
             vol.EndPos = hit.point;
             shotTime = fireRate;
+            audioSource.clip = laserSound;
+            audioSource.Play();
         }
     }
 
