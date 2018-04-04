@@ -129,7 +129,7 @@ public class FriendAIDirector : MonoBehaviour
                 {
                     if (j != i)
                     {
-                        team[j].Revive(team[i].transform);
+                        team[j].Revive(team[i]);
                     }
                 }
             }

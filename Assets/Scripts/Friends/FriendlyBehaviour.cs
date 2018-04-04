@@ -50,6 +50,7 @@ public class FriendlyBehaviour : MonoBehaviour
     public bool CeaseFire { get; set; }
 
     bool startedReviving = false;
+    FriendlyBehaviour reviveTarget;
 
     private void Start()
     {
@@ -159,9 +160,10 @@ public class FriendlyBehaviour : MonoBehaviour
         }
     }
 
-    public void Revive(Transform member)
+    public void Revive(FriendlyBehaviour member)
     {
-        controller.goal = member;
+        controller.goal = member.transform;
+        reviveTarget = member;
         state = FriendState.Reviving;
         startedReviving = false;
     }
@@ -169,6 +171,8 @@ public class FriendlyBehaviour : MonoBehaviour
     void DoneReviving()
     {
         state = FriendState.TakingCover;
+        reviveTarget.State = FriendState.TakingCover;
+        reviveTarget = null;
     }
 
     void ShootTarget()
