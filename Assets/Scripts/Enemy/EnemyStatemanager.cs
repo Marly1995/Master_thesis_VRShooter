@@ -16,6 +16,11 @@ public class EnemyStatemanager : MonoBehaviour
     Ray ray;
     RaycastHit hit;
 
+    private void Start()
+    {
+        coverTaken = new bool[coverPositions.Length];
+    }
+
     public Transform SearchForTarget(Vector3 position)
     {
         Transform newTarget = null;

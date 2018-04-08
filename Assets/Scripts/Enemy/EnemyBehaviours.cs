@@ -27,13 +27,14 @@ public class EnemyBehaviours : MonoBehaviour
         set { state = value; }
     }
 
+    [HideInInspector]
     public EnemyStatemanager manager;
     
     AgentMove controller;
 
     bool gunShown;
-    public MeshRenderer gunRenderer;
-    public Transform barrell;
+    MeshRenderer gunRenderer;
+    Transform barrell;
     public GameObject hitParticles;
     public GameObject hitTrail;
 
@@ -53,6 +54,9 @@ public class EnemyBehaviours : MonoBehaviour
 
     private void Start()
     {
+        manager = FindObjectOfType<EnemyStatemanager>();
+        gunRenderer = GetComponentInChildren<MeshRenderer>();
+        barrell = gunRenderer.transform.GetChild(0);
         robotRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         controller = GetComponent<AgentMove>();
         ChooseNextPatrolPosition();
@@ -91,7 +95,7 @@ public class EnemyBehaviours : MonoBehaviour
                 {
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Crouch", true);
-                    hasCoverPoint = false;
+                    hasCoverPoint = true;
                     state = EnemyState.Cover;
                 }
                 break;
@@ -102,6 +106,7 @@ public class EnemyBehaviours : MonoBehaviour
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
                 controller.Animator.SetBool("Shoot", false);
+                if (controller.goal == null) { state = EnemyState.Idle; }
                 if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
                 {
                     ChooseNextPatrolPosition();
@@ -140,6 +145,7 @@ public class EnemyBehaviours : MonoBehaviour
 
     void ChooseNextPatrolPosition()
     {
+        if (patrolPositions.Length <= 0) { state = EnemyState.Idle; return; }
         if (patrolIndex < patrolPositions.Length)
         {
             controller.goal = patrolPositions[patrolIndex++];

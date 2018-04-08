@@ -70,7 +70,7 @@ public class PlayerShootLeft : MonoBehaviour {
             Destroy(particles, 0.4f);
             if (hit.collider.tag == "Enemy")
             {
-                hit.collider.gameObject.GetComponent<EnemyDie>().Die();
+                hit.collider.gameObject.GetComponent<EnemyBehaviours>().State = EnemyState.Dead;
             }
         }
         GameObject trail = Instantiate(hitTrail);

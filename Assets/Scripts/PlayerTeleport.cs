@@ -10,20 +10,29 @@ public class PlayerTeleport : MonoBehaviour {
     GameObject teleportLocation = null;
     GameObject currentLocation = null;
 
+    public GameObject locationsParent;
+    bool visivble = false;
+
     Ray ray;
     RaycastHit hit;
 
     void Update ()
     {
         ray = new Ray(transform.position, transform.forward);
-
-        if (OVRInput.Get(OVRInput.Button.One))
+        if (OVRInput.Get(OVRInput.Button.Three))
         {
+            if (!visivble)
+            {
+                visivble = true;
+                locationsParent.SetActive(visivble);
+            }
             LookForTeleport();
         }
 
-        if (OVRInput.GetUp(OVRInput.Button.One))
+        if (OVRInput.GetUp(OVRInput.Button.Three))
         {
+            visivble = false;
+            StartCoroutine(SwitchVisibility());
             DoTeleport();
         }
     }
@@ -69,5 +78,11 @@ public class PlayerTeleport : MonoBehaviour {
             currentLocation.SetActive(false);
             teleportLocation = null;
         }
+    }
+
+    IEnumerator SwitchVisibility()
+    {
+        yield return new WaitForSeconds(0.1f);
+        locationsParent.SetActive(visivble);
     }
 }
