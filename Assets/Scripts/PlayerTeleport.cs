@@ -82,7 +82,7 @@ public class PlayerTeleport : MonoBehaviour {
 
     IEnumerator SwitchVisibility()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f);
         locationsParent.SetActive(visivble);
     }
 }
