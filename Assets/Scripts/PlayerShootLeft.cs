@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerShootLeft : MonoBehaviour {
 
+    public AudioSource lazerShot;
+
     public float fireRate;
     float shotTimer;
 
@@ -77,6 +79,7 @@ public class PlayerShootLeft : MonoBehaviour {
         VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
         vol.StartPos = barrellStart.position;
         vol.EndPos = barrelEnd.position;
+        lazerShot.Play();
     }
 
     IEnumerator DissolveOut()

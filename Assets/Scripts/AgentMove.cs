@@ -34,6 +34,7 @@ public class AgentMove : MonoBehaviour
         if (audioTimer <= 0f && agent.velocity.magnitude >= 1f)
         {
             audioSource.clip = footstep;
+            audioSource.volume = Random.Range(0.6f, 0.8f);
             audioSource.Play();
             audioTimer = audioTime;
         }
