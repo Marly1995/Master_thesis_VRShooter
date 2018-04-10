@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TeleportLocation : MonoBehaviour
 {
+    public int index;
+
     public GameObject particles;
     public MeshRenderer mesh;
 
@@ -34,5 +36,10 @@ public class TeleportLocation : MonoBehaviour
             particles.SetActive(false);
             mesh.material = basicMat;
         }
+    }
+
+    public void SetIndex()
+    {
+        WorldState.TeleportIndex = index;
     }
 }

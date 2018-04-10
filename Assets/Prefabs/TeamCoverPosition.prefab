@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4983736162270906}
   - component: {fileID: 23464755506070836}
   - component: {fileID: 33067433051894192}
+  - component: {fileID: 114026612240856794}
   m_Layer: 0
   m_Name: TeamCoverPosition
   m_TagString: Untagged
@@ -83,3 +84,14 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1009719714688138}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114026612240856794
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1009719714688138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92bf2350e99379d409b0973f111b2ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

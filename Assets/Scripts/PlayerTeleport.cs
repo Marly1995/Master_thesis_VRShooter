@@ -71,6 +71,7 @@ public class PlayerTeleport : MonoBehaviour {
         {
             player.transform.position = teleportLocation.transform.position;
             teleportLocation.GetComponent<TeleportLocation>().Active = false;
+            teleportLocation.GetComponent<TeleportLocation>().SetIndex();
 
             if (currentLocation != null)
             { currentLocation.SetActive(true); }

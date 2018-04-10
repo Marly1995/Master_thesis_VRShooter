@@ -705,21 +705,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1942776634391768
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4157227697820578}
-  m_Layer: 0
-  m_Name: BarrelEnd
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1954668551729972
 GameObject:
   m_ObjectHideFlags: 1
@@ -926,20 +911,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4318601075840222}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4157227697820578
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1942776634391768}
-  m_LocalRotation: {x: -0.00000007450579, y: -0.000000014901158, z: 0.00000017881389,
-    w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 5.0537}
-  m_LocalScale: {x: 1.0000007, y: 1.0000008, z: 1.0000007}
-  m_Children: []
-  m_Father: {fileID: 4318601075840222}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4168432864979150
 Transform:
@@ -1149,7 +1120,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4130049626851018}
-  - {fileID: 4157227697820578}
   m_Father: {fileID: 4800723148315822}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 31.2, y: 96.82, z: -104.3}
@@ -1270,7 +1240,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588994026423984}
   m_LocalRotation: {x: -0, y: -0.7372725, z: -0, w: 0.6755956}
-  m_LocalPosition: {x: -1.97, y: 0, z: -0.96}
+  m_LocalPosition: {x: 15.57831, y: 0.19205621, z: 0.6107998}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 4808279076659562}
@@ -1655,16 +1625,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cf26e7271cdc14ead66ef6ac5407c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserSound: {fileID: 0}
+  laserSound: {fileID: 8300000, guid: dc309e2fa65d1b649a2614552703dd98, type: 3}
   state: 0
-  gunRenderer: {fileID: 0}
-  barrell: {fileID: 0}
-  hitParticles: {fileID: 0}
-  hitTrail: {fileID: 0}
+  hitParticles: {fileID: 1974713409960000, guid: e9892c571799be846a942128af414ddf,
+    type: 2}
+  hitTrail: {fileID: 1362479706458640, guid: 6244f880bcc76cb4a882548feb04904d, type: 2}
   target: {fileID: 0}
   coverPositions: []
-  patrolPositions: []
-  fireRate: 0
+  fireRate: 1
 --- !u!114 &114688700978070272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1676,7 +1644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5a0298dbe38694e9c1f2f18e14e753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstep: {fileID: 0}
+  footstep: {fileID: 8300000, guid: f54aeb3f581ee36498a01fab4d66dc01, type: 3}
   goal: {fileID: 0}
 --- !u!137 &137984179615936584
 SkinnedMeshRenderer:

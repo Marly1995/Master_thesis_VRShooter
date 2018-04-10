@@ -63,7 +63,12 @@ public class FriendStateManager : MonoBehaviour
 
     public void UpdateCoverPoints(int index)
     {
-        coverPositions = teleportPoints[index].GetComponentsInChildren<Transform>();
+        TeamCoverPosition[] covpos = teleportPoints[index].GetComponentsInChildren<TeamCoverPosition>();
+        coverPositions = new Transform[4];
+        for (int i = 0; i < 4; i++)
+        {
+            coverPositions[i] = covpos[i].transform;
+        }
         coverTaken = new bool[coverPositions.Length];
     }
 

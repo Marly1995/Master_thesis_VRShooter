@@ -31,8 +31,8 @@ public class FriendlyBehaviour : MonoBehaviour
     FriendStateManager manager;
 
     bool gunShown;
-    public MeshRenderer gunRenderer;
-    public Transform barrell;
+    MeshRenderer gunRenderer;
+    Transform barrell;
     public GameObject hitParticles;
     public GameObject hitTrail;
 
@@ -40,9 +40,6 @@ public class FriendlyBehaviour : MonoBehaviour
 
     public Transform[] coverPositions;
     bool hasCoverPoint = false;
-
-    public Transform[] patrolPositions;
-    int patrolIndex;
 
     public float fireRate;
     float shotTime;
@@ -54,6 +51,9 @@ public class FriendlyBehaviour : MonoBehaviour
 
     private void Start()
     {
+        manager = FindObjectOfType<FriendStateManager>();
+        gunRenderer = GetComponentInChildren<MeshRenderer>();
+        barrell = gunRenderer.transform.GetChild(0);
         controller = GetComponent<AgentMove>();
     }
 
@@ -86,7 +86,8 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Animator.SetBool("Shoot", false);
                 if (!hasCoverPoint)
                 { TakeCover(); }
-                if (Vector3.Distance(transform.position, controller.goal.position) <= 1f)
+                if (controller.goal != null && 
+                    Vector3.Distance(transform.position, controller.goal.position) <= 1f)
                 {
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Crouch", true);

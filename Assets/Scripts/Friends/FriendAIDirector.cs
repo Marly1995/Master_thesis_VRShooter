@@ -21,9 +21,9 @@ public class FriendAIDirector : MonoBehaviour
 
     int playerTeleportIndex;
 
-    Command command;
-
-    bool commandGiven;
+    public Command command;
+    
+    bool commandGiven = true;
 
     public float sightRadius;
     public float snipingSightRadius;
@@ -61,7 +61,11 @@ public class FriendAIDirector : MonoBehaviour
 
     public void Follow()
     {
-        stateManager.UpdateCoverPoints(playerTeleportIndex);
+        if (WorldState.TeleportIndex != playerTeleportIndex)
+        {
+            playerTeleportIndex = WorldState.TeleportIndex;
+            stateManager.UpdateCoverPoints(playerTeleportIndex);
+        }
         foreach (FriendlyBehaviour instance in team)
         {
             instance.State = FriendState.TakingCover;
