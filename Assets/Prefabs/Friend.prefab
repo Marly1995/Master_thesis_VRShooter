@@ -472,6 +472,7 @@ GameObject:
   - component: {fileID: 95038845881559092}
   - component: {fileID: 114688700978070272}
   - component: {fileID: 195435467446922028}
+  - component: {fileID: 114521733924924608}
   m_Layer: 0
   m_Name: Friend
   m_TagString: Untagged
@@ -1643,17 +1644,39 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114521733924924608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1588994026423984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0cf26e7271cdc14ead66ef6ac5407c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserSound: {fileID: 0}
+  state: 0
+  gunRenderer: {fileID: 0}
+  barrell: {fileID: 0}
+  hitParticles: {fileID: 0}
+  hitTrail: {fileID: 0}
+  target: {fileID: 0}
+  coverPositions: []
+  patrolPositions: []
+  fireRate: 0
 --- !u!114 &114688700978070272
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588994026423984}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b5a0298dbe38694e9c1f2f18e14e753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  footstep: {fileID: 0}
   goal: {fileID: 0}
 --- !u!137 &137984179615936584
 SkinnedMeshRenderer:
@@ -1756,7 +1779,7 @@ NavMeshAgent:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1588994026423984}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 2
