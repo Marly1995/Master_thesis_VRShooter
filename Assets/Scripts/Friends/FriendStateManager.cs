@@ -78,8 +78,8 @@ public class FriendStateManager : MonoBehaviour
         float closest = Mathf.Infinity;
         for (int i = 0; i < coverPositions.Length; i++)
         {
-            float dist = Vector3.Distance(coverPositions[i].position, position);
-            if (dist < closest && dist < sightRadius)
+            float dist = Vector3.Distance(coverPositions[i].localPosition, position);
+            if (dist < closest)
             {
                 if (!coverTaken[i])
                 {
