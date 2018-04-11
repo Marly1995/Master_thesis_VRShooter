@@ -68,6 +68,7 @@ public class FriendAIDirector : MonoBehaviour
         }
         foreach (FriendlyBehaviour instance in team)
         {
+            instance.RemoveCurrentCover();
             instance.State = FriendState.TakingCover;
         }
     }

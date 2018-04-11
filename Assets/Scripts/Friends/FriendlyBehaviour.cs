@@ -151,6 +151,11 @@ public class FriendlyBehaviour : MonoBehaviour
         }
     }
 
+    public void RemoveCurrentCover()
+    {
+        hasCoverPoint = false;
+    }
+
     void TakeCover()
     {
         Transform coverpoint = manager.SearchForCover(transform.position);
