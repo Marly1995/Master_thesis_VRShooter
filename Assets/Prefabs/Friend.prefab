@@ -476,7 +476,7 @@ GameObject:
   - component: {fileID: 82526725027463972}
   m_Layer: 0
   m_Name: Friend
-  m_TagString: Untagged
+  m_TagString: Friendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

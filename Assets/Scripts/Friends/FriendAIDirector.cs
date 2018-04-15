@@ -56,7 +56,37 @@ public class FriendAIDirector : MonoBehaviour
                     Revive();
                     break;
             }
+            commandGiven = false;
         }
+    }
+
+    public void RecieveCommand(string str)
+    {
+        switch (str)
+        {
+            case "follow":
+                command = Command.Follow;
+                break;
+            case "rush":
+                command = Command.Rush;
+                break;
+            case "startFire":
+                command = Command.ResumeFire;
+                break;
+            case "ceaseFire":
+                command = Command.CeaseFire;
+                break;
+            case "sneak":
+                command = Command.Sneak;
+                break;
+            case "danger":
+                command = Command.Snipe;
+                break;
+            case "revive":
+                command = Command.Revive;
+                break;
+        }
+        commandGiven = true;
     }
 
     public void Follow()
@@ -75,7 +105,11 @@ public class FriendAIDirector : MonoBehaviour
 
     public void Rush()
     {
-        stateManager.UpdateCoverPoints(playerTeleportIndex + 1);
+        if (WorldState.TeleportIndex != playerTeleportIndex)
+        {
+            playerTeleportIndex = WorldState.TeleportIndex;
+        }
+        stateManager.UpdateCoverPoints(playerTeleportIndex - 1);
         foreach (FriendlyBehaviour instance in team)
         {
             instance.State = FriendState.TakingCover;
@@ -100,10 +134,14 @@ public class FriendAIDirector : MonoBehaviour
 
     public void Sneak()
     {
+        if (WorldState.TeleportIndex != playerTeleportIndex)
+        {
+            playerTeleportIndex = WorldState.TeleportIndex;
+        }
+        stateManager.UpdateCoverPoints(playerTeleportIndex - 1);
         foreach (FriendlyBehaviour instance in team)
         {
             instance.CeaseFire = true;
-            stateManager.UpdateCoverPoints(playerTeleportIndex + 1);
             instance.State = FriendState.Sneak;
         }
     }

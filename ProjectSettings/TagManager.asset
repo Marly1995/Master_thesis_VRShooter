@@ -16,6 +16,7 @@ TagManager:
   - Enemy
   - EnemyStateManager
   - Barrell
+  - Friendly
   layers:
   - Default
   - TransparentFX
