@@ -16,6 +16,8 @@ public enum EnemyState
 
 public class EnemyBehaviours : MonoBehaviour
 {
+    public int personalIndex;
+
     AudioSource audioSource;
     public AudioClip laserSound;
 
@@ -29,6 +31,7 @@ public class EnemyBehaviours : MonoBehaviour
 
     [HideInInspector]
     public EnemyStatemanager manager;
+    FriendStateManager fmanager;
     
     AgentMove controller;
 
@@ -38,7 +41,7 @@ public class EnemyBehaviours : MonoBehaviour
     public GameObject hitParticles;
     public GameObject hitTrail;
 
-    Transform target;
+    public Transform target;
 
     bool hasCoverPoint = false;
 
@@ -46,6 +49,7 @@ public class EnemyBehaviours : MonoBehaviour
     int patrolIndex;
 
     public float fireRate;
+    public float rotationSpeed;
     float shotTime;
 
     public SkinnedMeshRenderer robotRenderer;
@@ -55,6 +59,7 @@ public class EnemyBehaviours : MonoBehaviour
     private void Start()
     {
         manager = FindObjectOfType<EnemyStatemanager>();
+        fmanager = FindObjectOfType<FriendStateManager>();
         gunRenderer = GetComponentInChildren<MeshRenderer>();
         barrell = gunRenderer.transform.GetChild(0);
         robotRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
@@ -64,82 +69,94 @@ public class EnemyBehaviours : MonoBehaviour
 
     private void Update()
     {
-        switch (state)
+        if (Vector3.Distance(manager.player.transform.position, transform.position) <= 20f)
         {
-            case EnemyState.Idle:
-                if (gunShown)
-                    StartCoroutine(DissolveGunOut());
-                gunShown = false;
-                controller.Agent.isStopped = true;
-                controller.Animator.SetBool("Crouch", false);
-                controller.Animator.SetBool("Shoot", false);
-                break;
-            case EnemyState.Cover:
-                if (gunShown)
-                    StartCoroutine(DissolveGunOut());
-                gunShown = false;
-                controller.Agent.isStopped = true;
-                controller.Animator.SetBool("Crouch", true);
-                controller.Animator.SetBool("Shoot", false);
-                break;
-            case EnemyState.TakingCover:
-                if (gunShown)
-                    StartCoroutine(DissolveGunOut());
-                gunShown = false;
-                controller.Agent.isStopped = false;
-                controller.Animator.SetBool("Crouch", false);
-                controller.Animator.SetBool("Shoot", false);
-                if (!hasCoverPoint)
-                { TakeCover(); }
-                if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+            if (target == null)
+            {
+                target = manager.SearchForTarget(transform.position);
+                if (target != null)
                 {
+                    state = EnemyState.TakingCover;
+                }
+            }
+            switch (state)
+            {
+                case EnemyState.Idle:
+                    if (gunShown)
+                        StartCoroutine(DissolveGunOut());
+                    gunShown = false;
+                    controller.Agent.isStopped = true;
+                    controller.Animator.SetBool("Crouch", false);
+                    controller.Animator.SetBool("Shoot", false);
+                    break;
+                case EnemyState.Cover:
+                    if (gunShown)
+                        StartCoroutine(DissolveGunOut());
+                    gunShown = false;
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Crouch", true);
-                    hasCoverPoint = true;
-                    state = EnemyState.Cover;
-                }
-                break;
-            case EnemyState.Patrol:
-                if (gunShown)
-                    StartCoroutine(DissolveGunOut());
-                gunShown = false;
-                controller.Agent.isStopped = false;
-                controller.Animator.SetBool("Crouch", false);
-                controller.Animator.SetBool("Shoot", false);
-                if (controller.goal == null) { state = EnemyState.Idle; }
-                if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
-                {
-                    ChooseNextPatrolPosition();
-                }
-                break;
-            case EnemyState.Sneak:
-                if (gunShown)
-                    StartCoroutine(DissolveGunOut());
-                gunShown = false;
-                controller.Agent.isStopped = false;
-                controller.Animator.SetBool("Crouch", true);
-                controller.Animator.SetBool("Shoot", false);
-                if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
-                {
-                    ChooseNextPatrolPosition();
-                }
-                break;
-            case EnemyState.Shooting:
-                controller.Agent.isStopped = true;
-                controller.Animator.SetBool("Crouch", false);
-                controller.Animator.SetBool("Shoot", true);
-                ShootTarget();
-                break;
-            case EnemyState.CoverShooting:
-                controller.Agent.isStopped = true;
-                controller.Animator.SetBool("Crouch", true);
-                controller.Animator.SetBool("Shoot", true);
-                break;
-            case EnemyState.Dead:
+                    controller.Animator.SetBool("Shoot", false);
+                    break;
+                case EnemyState.TakingCover:
+                    if (gunShown)
+                        StartCoroutine(DissolveGunOut());
+                    gunShown = false;
+                    controller.Agent.isStopped = false;
+                    controller.Animator.SetBool("Crouch", false);
+                    controller.Animator.SetBool("Shoot", false);
+                    if (!hasCoverPoint)
+                    { TakeCover(); }
+                    if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+                    {
+                        controller.Agent.isStopped = true;
+                        controller.Animator.SetBool("Crouch", true);
+                        hasCoverPoint = true;
+                        state = EnemyState.CoverShooting;
+                    }
+                    break;
+                case EnemyState.Patrol:
+                    if (gunShown)
+                        StartCoroutine(DissolveGunOut());
+                    gunShown = false;
+                    controller.Agent.isStopped = false;
+                    controller.Animator.SetBool("Crouch", false);
+                    controller.Animator.SetBool("Shoot", false);
+                    if (controller.goal == null) { state = EnemyState.Idle; }
+                    if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+                    {
+                        ChooseNextPatrolPosition();
+                    }
+                    break;
+                case EnemyState.Sneak:
+                    if (gunShown)
+                        StartCoroutine(DissolveGunOut());
+                    gunShown = false;
+                    controller.Agent.isStopped = false;
+                    controller.Animator.SetBool("Crouch", true);
+                    controller.Animator.SetBool("Shoot", false);
+                    if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
+                    {
+                        ChooseNextPatrolPosition();
+                    }
+                    break;
+                case EnemyState.Shooting:
+                    controller.Agent.isStopped = true;
+                    controller.Animator.SetBool("Crouch", false);
+                    controller.Animator.SetBool("Shoot", true);
+                    ShootTarget();
+                    break;
+                case EnemyState.CoverShooting:
+                    controller.Agent.isStopped = true;
+                    controller.Animator.SetBool("Crouch", true);
+                    controller.Animator.SetBool("Shoot", true);
+                    ShootTarget();
+                    break;
+                case EnemyState.Dead:
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Dead", true);
                     Die();
-                break;
+                    break;
+            }
         }
     }
 
@@ -165,22 +182,30 @@ public class EnemyBehaviours : MonoBehaviour
             controller.goal = coverpoint;
             hasCoverPoint = true;
         }
+        else
+        {
+            state = EnemyState.Shooting;
+        }
     }
 
     void ShootTarget()
     {
-        shotTime -= Time.deltaTime;
-        if (!gunShown)
-        {
-            StartCoroutine(DissolveGunIn());
-        }
-        gunShown = true;
-
+        if (target == null)
         target = manager.SearchForTarget(transform.position);
 
         if (target != null)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, Quaternion.LookRotation(-target.position, Vector3.up).eulerAngles.y, transform.rotation.z);
+            shotTime -= Time.deltaTime;
+            if (!gunShown)
+            {
+                StartCoroutine(DissolveGunIn());
+            }
+            gunShown = true;
+
+            Vector3 direction = (target.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));    // flattens the vector3
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+
             if (shotTime <= 0f)
             {
                 Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f))) - barrell.position;
@@ -190,9 +215,9 @@ public class EnemyBehaviours : MonoBehaviour
                 {
                     GameObject particles = Instantiate(hitParticles, hit.point, Quaternion.identity);
                     Destroy(particles, 0.4f);
-                    if (hit.collider.tag == "Enemy")
+                    if (hit.collider.tag == "Friendly")
                     {
-                        //hit.collider.gameObject.GetComponent<EnemyDie>().Die();
+                        hit.collider.gameObject.GetComponent<FriendlyBehaviour>().State = FriendState.Downed;
                     }
                 }
                 GameObject trail = Instantiate(hitTrail);
@@ -212,7 +237,7 @@ public class EnemyBehaviours : MonoBehaviour
         if (!dead)
         {
             if (deathtime <= 0f)
-            { StartCoroutine(DissolvePlayerOut()); dead = true; }
+            { StartCoroutine(DissolvePlayerOut()); dead = true; fmanager.targets.RemoveAt(personalIndex); }
         }
     }
     

@@ -36,7 +36,7 @@ public class EnemyStatemanager : MonoBehaviour
                     if (dist < hiddenSightRadius)
                     {
                         ray = new Ray(transform.position, tar.transform.position);
-                        if (Physics.Raycast(ray, out hit))
+                        if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Friend")))
                         {
                             if (hit.collider.tag == "Friendly")
                             {
@@ -49,7 +49,7 @@ public class EnemyStatemanager : MonoBehaviour
                 else
                 {
                     ray = new Ray(transform.position, tar.transform.position);
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Friend")))
                     {
                         if (hit.collider.tag == "Friendly")
                         {

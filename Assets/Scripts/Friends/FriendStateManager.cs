@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class FriendStateManager : MonoBehaviour
 {
-    public EnemyBehaviours[] targets;
+    public List<EnemyBehaviours> targets;
     public Transform player;
-
-    int playerCoverIndex;
 
     public GameObject[] teleportPoints;
     public Transform[] coverPositions;
@@ -18,6 +16,16 @@ public class FriendStateManager : MonoBehaviour
 
     Ray ray;
     RaycastHit hit;
+
+    private void Start()
+    {
+        int index = 0;
+        foreach (EnemyBehaviours item in targets)
+        {
+            item.personalIndex = index;
+            index++;
+        }
+    }
 
     public Transform SearchForTarget(Vector3 position)
     {
@@ -34,7 +42,7 @@ public class FriendStateManager : MonoBehaviour
                     if (dist < hiddenSightRadius)
                     {
                         ray = new Ray(transform.position, tar.transform.position);
-                        if (Physics.Raycast(ray, out hit))
+                        if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Enemy")))
                         {
                             if (hit.collider.tag == "Enemy")
                             {
@@ -47,7 +55,7 @@ public class FriendStateManager : MonoBehaviour
                 else
                 {
                     ray = new Ray(transform.position, tar.transform.position);
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Enemy")))
                     {
                         if (hit.collider.tag == "Enemy")
                         {

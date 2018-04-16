@@ -112,6 +112,7 @@ public class FriendAIDirector : MonoBehaviour
         stateManager.UpdateCoverPoints(playerTeleportIndex - 1);
         foreach (FriendlyBehaviour instance in team)
         {
+            instance.RemoveCurrentCover();
             instance.State = FriendState.TakingCover;
         }
     }
@@ -129,6 +130,7 @@ public class FriendAIDirector : MonoBehaviour
         foreach (FriendlyBehaviour instance in team)
         {
             instance.CeaseFire = false;
+            instance.State = FriendState.Shooting;
         }
     }
 
@@ -141,6 +143,7 @@ public class FriendAIDirector : MonoBehaviour
         stateManager.UpdateCoverPoints(playerTeleportIndex - 1);
         foreach (FriendlyBehaviour instance in team)
         {
+            instance.RemoveCurrentCover();
             instance.CeaseFire = true;
             instance.State = FriendState.Sneak;
         }
@@ -151,6 +154,7 @@ public class FriendAIDirector : MonoBehaviour
         foreach (FriendlyBehaviour instance in team)
         {
             instance.CeaseFire = false;
+            instance.State = FriendState.Shooting;
         }
         stateManager.sightRadius = snipingSightRadius;
         StartCoroutine(SnipeDuration());
