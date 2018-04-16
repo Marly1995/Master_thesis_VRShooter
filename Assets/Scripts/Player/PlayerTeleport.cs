@@ -16,6 +16,8 @@ public class PlayerTeleport : MonoBehaviour {
     Ray ray;
     RaycastHit hit;
 
+    public VolumetricLines.VolumetricLineBehavior line;
+
     void Update ()
     {
         ray = new Ray(transform.position, transform.forward);
@@ -25,6 +27,7 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 visivble = true;
                 locationsParent.SetActive(visivble);
+                line.LineWidth = 0.1f;
             }
             LookForTeleport();
         }
@@ -32,6 +35,7 @@ public class PlayerTeleport : MonoBehaviour {
         if (OVRInput.GetUp(OVRInput.Button.Three))
         {
             visivble = false;
+            line.LineWidth = 0.0f;
             StartCoroutine(SwitchVisibility());
             DoTeleport();
         }
@@ -45,6 +49,7 @@ public class PlayerTeleport : MonoBehaviour {
             {
                 teleportLocation = hit.collider.gameObject;
                 teleportLocation.GetComponent<TeleportLocation>().Active = true;
+                line.LineColor = Color.cyan;
             }
             else
             {
@@ -53,6 +58,7 @@ public class PlayerTeleport : MonoBehaviour {
                     teleportLocation.GetComponent<TeleportLocation>().Active = false;
                 }
                 teleportLocation = null;
+                line.LineColor = Color.magenta;
             }
         }
         else 
