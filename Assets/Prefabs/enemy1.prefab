@@ -1722,6 +1722,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b111c5bb9e3f749bbfe586852b24c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  points: 200
+  add: {fileID: 1790230599269546, guid: f385f054f203f4c4b8eeb575da157945, type: 2}
   personalIndex: 0
   laserSound: {fileID: 8300000, guid: dc309e2fa65d1b649a2614552703dd98, type: 3}
   state: 0

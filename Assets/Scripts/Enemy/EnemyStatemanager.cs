@@ -19,6 +19,7 @@ public class EnemyStatemanager : MonoBehaviour
     private void Start()
     {
         coverTaken = new bool[coverPositions.Length];
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     public Transform SearchForTarget(Vector3 position)

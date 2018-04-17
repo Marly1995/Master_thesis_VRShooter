@@ -25,8 +25,8 @@ public class FriendAIDirector : MonoBehaviour
     
     bool commandGiven = true;
 
-    public float sightRadius;
-    public float snipingSightRadius;
+    public float sightRadius = 30f;
+    public float snipingSightRadius = 60f;
 
     private void Update()
     {
@@ -70,7 +70,7 @@ public class FriendAIDirector : MonoBehaviour
             case "rush":
                 command = Command.Rush;
                 break;
-            case "startFire":
+            case "startFiring":
                 command = Command.ResumeFire;
                 break;
             case "ceaseFire":
@@ -122,6 +122,7 @@ public class FriendAIDirector : MonoBehaviour
         foreach (FriendlyBehaviour instance in team)
         {
             instance.CeaseFire = true;
+            instance.State = FriendState.Idle;
         }
     }
 

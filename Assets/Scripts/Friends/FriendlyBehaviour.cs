@@ -50,17 +50,24 @@ public class FriendlyBehaviour : MonoBehaviour
     bool startedReviving = false;
     FriendlyBehaviour reviveTarget;
 
+    public bool downed = false;
+
     private void Start()
     {
         manager = FindObjectOfType<FriendStateManager>();
         gunRenderer = GetComponentInChildren<MeshRenderer>();
         barrell = gunRenderer.transform.GetChild(0);
         controller = GetComponent<AgentMove>();
+        audioSource = GetComponent<AudioSource>();
         CeaseFire = false;
     }
 
     private void Update()
     {
+        if (downed)
+        {
+            state = FriendState.Downed;
+        }
         switch (state)
         {
             case FriendState.Idle:
@@ -69,6 +76,7 @@ public class FriendlyBehaviour : MonoBehaviour
                 gunShown = false;
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", false);
+                controller.Animator.SetBool("Dead", false);
                 controller.Animator.SetBool("Shoot", false);
                 break;
             case FriendState.Cover:
@@ -78,6 +86,7 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", true);
                 controller.Animator.SetBool("Shoot", false);
+                controller.Animator.SetBool("Dead", false);
                 break;
             case FriendState.TakingCover:
                 if (gunShown)
@@ -86,9 +95,10 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
                 controller.Animator.SetBool("Shoot", false);
+                controller.Animator.SetBool("Dead", false);
                 if (!hasCoverPoint)
                 { TakeCover(); }
-                if (controller.goal != null && 
+                if (controller.goal != null &&
                     Vector3.Distance(transform.position, controller.goal.position) <= 1f)
                 {
                     controller.Agent.isStopped = true;
@@ -111,6 +121,7 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", true);
                 controller.Animator.SetBool("Shoot", false);
+                controller.Animator.SetBool("Dead", false);
                 if (Vector3.Distance(transform.position, controller.goal.position) <= 1f)
                 {
                     controller.Agent.isStopped = true;
@@ -123,17 +134,20 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", false);
                 controller.Animator.SetBool("Shoot", true);
+                controller.Animator.SetBool("Dead", false);
                 ShootTarget();
                 break;
             case FriendState.CoverShooting:
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Crouch", true);
                 controller.Animator.SetBool("Shoot", true);
+                controller.Animator.SetBool("Dead", false);
                 ShootTarget();
                 break;
             case FriendState.Downed:
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Dead", true);
+                downed = true;
                 break;
             case FriendState.Reviving:
                 if (gunShown)
@@ -142,7 +156,8 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = false;
                 controller.Animator.SetBool("Crouch", false);
                 controller.Animator.SetBool("Shoot", false);
-                if (Vector3.Distance(transform.position, controller.goal.position) <= 2f &&
+                controller.Animator.SetBool("Dead", false);
+                if (Vector3.Distance(transform.position, controller.goal.position) <= 4f &&
                     !startedReviving)
                 {
                     controller.Agent.isStopped = true;
@@ -181,6 +196,7 @@ public class FriendlyBehaviour : MonoBehaviour
     {
         state = FriendState.TakingCover;
         reviveTarget.State = FriendState.TakingCover;
+        reviveTarget.downed = false;
         reviveTarget = null;
     }
 

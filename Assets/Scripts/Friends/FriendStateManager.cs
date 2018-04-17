@@ -11,8 +11,8 @@ public class FriendStateManager : MonoBehaviour
     public Transform[] coverPositions;
     public bool[] coverTaken;
 
-    public float sightRadius;
-    public float hiddenSightRadius;
+    public float sightRadius = 30f;
+    public float hiddenSightRadius = 20f;
 
     Ray ray;
     RaycastHit hit;
@@ -41,28 +41,14 @@ public class FriendStateManager : MonoBehaviour
                 {
                     if (dist < hiddenSightRadius)
                     {
-                        ray = new Ray(transform.position, tar.transform.position);
-                        if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Enemy")))
-                        {
-                            if (hit.collider.tag == "Enemy")
-                            {
-                                closest = dist;
-                                newTarget = tar.transform;
-                            }
-                        }
+                        closest = dist;
+                        newTarget = tar.transform;
                     }
                 }
                 else
                 {
-                    ray = new Ray(transform.position, tar.transform.position);
-                    if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Enemy")))
-                    {
-                        if (hit.collider.tag == "Enemy")
-                        {
-                            closest = dist;
-                            newTarget = tar.transform;
-                        }
-                    }
+                    closest = dist;
+                    newTarget = tar.transform;
                 }
             }
         }

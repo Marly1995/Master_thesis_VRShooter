@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EnemyState
 {
@@ -16,6 +17,9 @@ public enum EnemyState
 
 public class EnemyBehaviours : MonoBehaviour
 {
+    public int points;
+    public GameObject add;
+
     public int personalIndex;
 
     AudioSource audioSource;
@@ -64,12 +68,13 @@ public class EnemyBehaviours : MonoBehaviour
         barrell = gunRenderer.transform.GetChild(0);
         robotRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         controller = GetComponent<AgentMove>();
+        audioSource = GetComponent<AudioSource>();
         ChooseNextPatrolPosition();
     }
 
     private void Update()
     {
-        if (Vector3.Distance(manager.player.transform.position, transform.position) <= 20f)
+        if (Vector3.Distance(manager.player.transform.position, transform.position) <= 50f)
         {
             if (target == null)
             {
@@ -237,7 +242,17 @@ public class EnemyBehaviours : MonoBehaviour
         if (!dead)
         {
             if (deathtime <= 0f)
-            { StartCoroutine(DissolvePlayerOut()); dead = true; fmanager.targets.RemoveAt(personalIndex); }
+            {
+                fmanager.targets.Remove(this);
+                StartCoroutine(DissolvePlayerOut());
+                dead = true;
+                WorldState.Score += points;
+                Vector3 pos = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
+                GameObject obj = Instantiate(add);
+                obj.GetComponentInChildren<Text>().text = "+" + points.ToString();
+                Destroy(obj, 2.0f);
+
+            }
         }
     }
     

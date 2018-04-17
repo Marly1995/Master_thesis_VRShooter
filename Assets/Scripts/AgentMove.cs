@@ -41,6 +41,8 @@ public class AgentMove : MonoBehaviour
 
         animator.SetFloat("Forward", agent.velocity.magnitude);
         if (goal != null)
-        agent.SetDestination(goal.position);
+        {
+            agent.SetDestination(goal.position);
+        }
     }
 }

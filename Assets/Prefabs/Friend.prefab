@@ -1607,7 +1607,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: dc309e2fa65d1b649a2614552703dd98, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.6
   m_Pitch: 1
@@ -1653,7 +1653,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1731,6 +1731,7 @@ MonoBehaviour:
   coverPositions: []
   fireRate: 1
   rotationSpeed: 1
+  downed: 0
 --- !u!114 &114688700978070272
 MonoBehaviour:
   m_ObjectHideFlags: 1

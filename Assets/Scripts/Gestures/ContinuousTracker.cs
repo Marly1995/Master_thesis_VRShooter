@@ -33,30 +33,39 @@ public class ContinuousTracker : MonoBehaviour
 
     void Update()
     {
-        positions.Enqueue(rec.rightHand.position);
-        if (positions.Count > 10)
+        if (OVRInput.Get(OVRInput.Button.SecondaryHandTrigger))
         {
-            positions.Dequeue();
+            positions.Clear();
+            vels.Clear();
         }
-
-
-        vels.Enqueue((rec.rightHand.position - lastPos).magnitude);
-        lastPos = rec.rightHand.position;
-        if (vels.Count > 10)
+        else
         {
-            vels.Dequeue();
-        }
-
-        if (Time.time - checkTime >= lastTime)
-        {
-            lastTime = Time.time;
-            if (!started)
+            positions.Enqueue(rec.rightHand.position);
+            if (positions.Count > 10)
             {
-                //if (!VelocityCheck())
+                positions.Dequeue();
+            }
+
+
+            vels.Enqueue((rec.rightHand.position - lastPos).magnitude);
+            lastPos = rec.rightHand.position;
+            if (vels.Count > 10)
+            {
+                vels.Dequeue();
+            }
+
+            if (Time.time - checkTime >= lastTime)
+            {
+                lastTime = Time.time;
+                if (!started)
                 {
-                    if (!PositionCheck())
+                    //if (!VelocityCheck())
                     {
-                        StartCoroutine(GestureStarted());
+                        if (!PositionCheck())
+                        {
+                            rec.BeginRecording();
+                            StartCoroutine(GestureStarted());
+                        }
                     }
                 }
             }
@@ -74,6 +83,7 @@ public class ContinuousTracker : MonoBehaviour
         rec.ContinuousCheckRecognized();
         rec.constantPositions.Clear();
         started = false;
+        rec.EndRecording();
     }
 
     bool VelocityCheck()

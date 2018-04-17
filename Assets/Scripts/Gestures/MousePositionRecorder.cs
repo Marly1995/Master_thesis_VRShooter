@@ -346,6 +346,7 @@ public class MousePositionRecorder : MonoBehaviour
                 if (item.Value == decision)
                 { value = item.Key; }
             }
+            friendAI.RecieveCommand(value);
             //text.text = value;
             //nameInputField.text = value;
             Debug.Log("Did you write a: " + value + "?");

@@ -73,6 +73,10 @@ public class PlayerShoot : MonoBehaviour
             {
                 hit.collider.gameObject.GetComponent<EnemyBehaviours>().State = EnemyState.Dead;
             }
+            if (hit.collider.tag == "score")
+            {
+                hit.collider.gameObject.GetComponent<EnemyDie>().Die();
+            }
         }
         GameObject trail = Instantiate(hitTrail);
         VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
