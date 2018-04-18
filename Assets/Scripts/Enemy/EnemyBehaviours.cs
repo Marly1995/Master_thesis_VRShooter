@@ -17,7 +17,7 @@ public enum EnemyState
 
 public class EnemyBehaviours : MonoBehaviour
 {
-    public int points;
+    public int points = 500;
     public GameObject add;
 
     public int personalIndex;
@@ -213,7 +213,7 @@ public class EnemyBehaviours : MonoBehaviour
 
             if (shotTime <= 0f)
             {
-                Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f))) - barrell.position;
+                Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-2f, 2f), Random.Range(-1f, 1f))) - barrell.position;
                 Ray ray = new Ray(barrell.position, shotDir);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
@@ -248,7 +248,8 @@ public class EnemyBehaviours : MonoBehaviour
                 dead = true;
                 WorldState.Score += points;
                 Vector3 pos = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
-                GameObject obj = Instantiate(add);
+                GameObject obj = Instantiate(add, pos, Quaternion.identity);
+                obj.transform.LookAt(manager.player);
                 obj.GetComponentInChildren<Text>().text = "+" + points.ToString();
                 Destroy(obj, 2.0f);
 

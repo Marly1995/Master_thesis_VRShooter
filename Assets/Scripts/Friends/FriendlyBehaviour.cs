@@ -220,7 +220,7 @@ public class FriendlyBehaviour : MonoBehaviour
 
             if (shotTime <= 0f)
             {
-                Vector3 shotDir = (target.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f), Random.Range(-2f, 2f))) - barrell.position;
+                Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-2f, 2f), Random.Range(-1f, 1f))) - barrell.position;
                 Ray ray = new Ray(barrell.position, shotDir);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
@@ -229,6 +229,7 @@ public class FriendlyBehaviour : MonoBehaviour
                     Destroy(particles, 0.4f);
                     if (hit.collider.tag == "Enemy")
                     {
+                        hit.collider.gameObject.GetComponent<EnemyBehaviours>().points = 1000;
                         hit.collider.gameObject.GetComponent<EnemyBehaviours>().State = EnemyState.Dead;
                     }
                 }

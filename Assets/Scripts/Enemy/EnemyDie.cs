@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyDie : MonoBehaviour
 {
     GameObject player;
-    public GameObject obj;
     MeshRenderer render;
     
     [SerializeField]
@@ -13,7 +12,7 @@ public class EnemyDie : MonoBehaviour
 
     bool hit = false;
 
-    public int points = 500;
+    public int points = 300;
 
     private void Start()
     {
@@ -30,6 +29,7 @@ public class EnemyDie : MonoBehaviour
             WorldState.Score += points;
             GameObject obj = Instantiate(add, transform.position, Quaternion.LookRotation(player.transform.position, Vector3.up));
             obj.GetComponentInChildren<Text>().text = "+" + points.ToString();
+            obj.transform.LookAt(player.transform);
             Destroy(obj, 2.0f);
         }
     }
@@ -41,5 +41,6 @@ public class EnemyDie : MonoBehaviour
             render.material.SetFloat("_SliceAmount", i);
             yield return new WaitForSeconds(0.0002f);
         }
+        Destroy(gameObject);
     }
 }
