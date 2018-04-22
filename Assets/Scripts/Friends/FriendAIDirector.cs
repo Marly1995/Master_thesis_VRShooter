@@ -28,6 +28,30 @@ public class FriendAIDirector : MonoBehaviour
     public float sightRadius = 30f;
     public float snipingSightRadius = 60f;
 
+    public AudioSource audioSource;
+
+    #region voice clips
+    public AudioClip blastem;
+    public AudioClip ceasefire;
+    public AudioClip follow;
+    public AudioClip keephidden;
+    public AudioClip onme;
+    public AudioClip pushforward;
+    public AudioClip recoverteammate;
+    public AudioClip revive;
+    public AudioClip rush;
+    public AudioClip sneakforward;
+    public AudioClip startshooting;
+    public AudioClip staybackandsnipe;
+    public AudioClip stopfiring;
+    public AudioClip takethemoutfromafar;
+    #endregion
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     private void Update()
     {
         if (commandGiven)
@@ -101,6 +125,8 @@ public class FriendAIDirector : MonoBehaviour
             instance.RemoveCurrentCover();
             instance.State = FriendState.TakingCover;
         }
+        audioSource.clip = follow;
+        audioSource.Play();
     }
 
     public void Rush()
@@ -115,6 +141,8 @@ public class FriendAIDirector : MonoBehaviour
             instance.RemoveCurrentCover();
             instance.State = FriendState.TakingCover;
         }
+        audioSource.clip = rush;
+        audioSource.Play();
     }
 
     public void CeaseFire()
@@ -124,6 +152,8 @@ public class FriendAIDirector : MonoBehaviour
             instance.CeaseFire = true;
             instance.State = FriendState.Idle;
         }
+        audioSource.clip = ceasefire;
+        audioSource.Play();
     }
 
     public void ResumeFire()
@@ -133,6 +163,8 @@ public class FriendAIDirector : MonoBehaviour
             instance.CeaseFire = false;
             instance.State = FriendState.Shooting;
         }
+        audioSource.clip = blastem;
+        audioSource.Play();
     }
 
     public void Sneak()
@@ -148,6 +180,8 @@ public class FriendAIDirector : MonoBehaviour
             instance.CeaseFire = true;
             instance.State = FriendState.Sneak;
         }
+        audioSource.clip = sneakforward;
+        audioSource.Play();
     }
 
     public void Snipe()
@@ -159,6 +193,8 @@ public class FriendAIDirector : MonoBehaviour
         }
         stateManager.sightRadius = snipingSightRadius;
         StartCoroutine(SnipeDuration());
+        audioSource.clip = staybackandsnipe;
+        audioSource.Play();
     }
 
     IEnumerator SnipeDuration()
@@ -182,5 +218,7 @@ public class FriendAIDirector : MonoBehaviour
                 }
             }
         }
+        audioSource.clip = recoverteammate;
+        audioSource.Play();
     }
 }

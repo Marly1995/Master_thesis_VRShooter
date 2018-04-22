@@ -100,6 +100,10 @@ public class MousePositionRecorder : MonoBehaviour
         {
             constantPositions.Add(rightHand.localPosition);
         }
+        if (Input.GetKeyDown(KeyCode.Period))
+        {
+            SaveDatabase();
+        }
     }
 
     public void BeginRecording()
@@ -124,10 +128,59 @@ public class MousePositionRecorder : MonoBehaviour
         rightTrail.StopTrailing();
     }
 
+    public void ReplaceGesture(string name)
+    {
+        int removeIndex = 0;
+        for (int i = 0; i < storedGestures.Count; i++)
+        {
+            if (storedGestures[i].name == name)
+            {
+                removeIndex = i;
+            }
+        }
+        storedGestures.RemoveAt(removeIndex);
+
+        double[][] points = new double[rightHandPositions.Count][];
+        switch (mode)
+        {
+            case 3:
+                for (int i = 0; i < rightHandPositions.Count; i++)
+                {
+                    points[i] = new double[3] { rightHandPositions[i].x, rightHandPositions[i].y, rightHandPositions[i].z };
+                }
+                break;
+            case 6:
+                for (int i = 0; i < rightHandPositions.Count; i++)
+                {
+                    points[i] = new double[6] { rightHandPositions[i].x, rightHandPositions[i].y, rightHandPositions[i].z,
+                                                rightHandRotations[i].x, rightHandRotations[i].y, rightHandRotations[i].z };
+                }
+                break;
+            case 33:
+                for (int i = 0; i < rightHandPositions.Count; i++)
+                {
+                    points[i] = new double[6] { rightHandPositions[i].x, rightHandPositions[i].y, rightHandPositions[i].z,
+                                                leftHandPositions[i].x, leftHandPositions[i].y, leftHandPositions[i].z };
+                }
+                break;
+            case 66:
+                for (int i = 0; i < rightHandPositions.Count; i++)
+                {
+                    points[i] = new double[12] { rightHandPositions[i].x, rightHandPositions[i].y, rightHandPositions[i].z,
+                                                 rightHandRotations[i].x, rightHandRotations[i].y, rightHandRotations[i].z,
+                                                 leftHandPositions[i].x, leftHandPositions[i].y, leftHandPositions[i].z,
+                                                 leftHandRotations[i].x, leftHandRotations[i].y, leftHandRotations[i].z };
+                }
+                break;
+        }
+        Gesture gesture = new Gesture(points, name, gestureIndex[name]);
+        storedGestures.Add(gesture);
+    }
+
     //public void StoreGesture()
     //{
     //    double[][] points = new double[rightHandPositions.Count][];
-    //    switch(mode)
+    //    switch (mode)
     //    {
     //        case 3:
     //            for (int i = 0; i < rightHandPositions.Count; i++)
