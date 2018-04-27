@@ -192,6 +192,7 @@ MonoBehaviour:
   mesh: {fileID: 23556579269553948}
   activeMat: {fileID: 2100000, guid: 79fedca2be99e704ebe6883941c70007, type: 2}
   basicMat: {fileID: 2100000, guid: 0c46f3c90bf169344bd4c7be6cd28937, type: 2}
+  oldMat: {fileID: 2100000, guid: 72c0c745380087a41b563d94b117c7ad, type: 2}
 --- !u!136 &136728918166591514
 CapsuleCollider:
   m_ObjectHideFlags: 1

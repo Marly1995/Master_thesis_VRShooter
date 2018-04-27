@@ -19,6 +19,7 @@ using System.ComponentModel;
 
 public class MousePositionRecorder : MonoBehaviour
 {
+    DataLogger logger;
     //public Button StoreGestureBtn;
     //public Button LearnGesturesBtn;
     //public Button PredictGestureBtn;
@@ -66,6 +67,7 @@ public class MousePositionRecorder : MonoBehaviour
     void Start ()
     {
         friendAI = GetComponent<FriendAIDirector>();
+        logger = GetComponent<DataLogger>();
 
         rightHandPositions = new List<Vector3>();
         leftHandPositions = new List<Vector3>();
@@ -84,6 +86,7 @@ public class MousePositionRecorder : MonoBehaviour
         //PredictGestureBtn.onClick.AddListener(() => CheckRecognized(rightHandPositions));
         //SaveGesturesBtn.onClick.AddListener(() => SaveDatabase());
         //LoadGesturesBtn.onClick.AddListener(() => LoadDatabase());
+
 	}
 
     void FixedUpdate()
@@ -400,17 +403,8 @@ public class MousePositionRecorder : MonoBehaviour
                 { value = item.Key; }
             }
             friendAI.RecieveCommand(value);
-            //text.text = value;
-            //nameInputField.text = value;
+            logger.Log(value, true);
             Debug.Log("Did you write a: " + value + "?");
-
-            foreach (Gesture gesture in storedGestures)
-            {
-                if (gesture.name == value)
-                {
-                    //animator.BeginAnimation(gesture.points);
-                }
-            }
         }
     }
 
@@ -462,17 +456,8 @@ public class MousePositionRecorder : MonoBehaviour
             { value = item.Key; }
         }
         friendAI.RecieveCommand(value);
-        //text.text = value;
-        //nameInputField.text = value;
+        logger.Log(value, false);
         Debug.Log("Did you write a: " + value + "?");
-
-        foreach(Gesture gesture in storedGestures)
-        {
-            if (gesture.name == value)
-            {
-                //animator.BeginAnimation(gesture.points);
-            }
-        }
     }
 
     public string CheckRecognized(double[][] positions, int valuesUsed)

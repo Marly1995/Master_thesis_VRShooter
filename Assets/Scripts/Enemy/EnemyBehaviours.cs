@@ -20,8 +20,6 @@ public class EnemyBehaviours : MonoBehaviour
     public int points = 500;
     public GameObject add;
 
-    public int personalIndex;
-
     AudioSource audioSource;
     public AudioClip laserSound;
 
@@ -42,7 +40,7 @@ public class EnemyBehaviours : MonoBehaviour
     bool gunShown;
     MeshRenderer gunRenderer;
     Transform barrell;
-    public GameObject hitParticles;
+    public GameObject bullet;
     public GameObject hitTrail;
 
     public Transform target;
@@ -54,11 +52,14 @@ public class EnemyBehaviours : MonoBehaviour
 
     public float fireRate;
     public float rotationSpeed;
+    public float shotSpeed;
     float shotTime;
 
     public SkinnedMeshRenderer robotRenderer;
     float deathtime = 2.0f;
     bool dead;
+
+    float targetSearchTime = 2.0f;
 
     private void Start()
     {
@@ -76,8 +77,10 @@ public class EnemyBehaviours : MonoBehaviour
     {
         if (Vector3.Distance(manager.player.transform.position, transform.position) <= 50f)
         {
-            if (target == null)
+            targetSearchTime -= Time.deltaTime;
+            if (target == null || targetSearchTime < 0f)
             {
+                targetSearchTime = 2.0f;
                 target = manager.SearchForTarget(transform.position);
                 if (target != null)
                 {
@@ -189,7 +192,7 @@ public class EnemyBehaviours : MonoBehaviour
         }
         else
         {
-            state = EnemyState.Shooting;
+            state = EnemyState.CoverShooting;
         }
     }
 
@@ -207,28 +210,17 @@ public class EnemyBehaviours : MonoBehaviour
             }
             gunShown = true;
 
-            Vector3 direction = (target.position - transform.position).normalized;
+            Vector3 direction = (target.position - barrell.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));    // flattens the vector3
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
 
             if (shotTime <= 0f)
             {
                 Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-2f, 2f), Random.Range(-1f, 1f))) - barrell.position;
-                Ray ray = new Ray(barrell.position, shotDir);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    GameObject particles = Instantiate(hitParticles, hit.point, Quaternion.identity);
-                    Destroy(particles, 0.4f);
-                    if (hit.collider.tag == "Friendly")
-                    {
-                        hit.collider.gameObject.GetComponent<FriendlyBehaviour>().State = FriendState.Downed;
-                    }
-                }
-                GameObject trail = Instantiate(hitTrail);
-                VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
-                vol.StartPos = barrell.position;
-                vol.EndPos = hit.point;
+
+                GameObject bul = Instantiate(bullet, barrell.position, Quaternion.identity);
+                bul.GetComponent<Rigidbody>().AddForce(shotDir * shotSpeed, ForceMode.Impulse);
+
                 shotTime = fireRate;
                 audioSource.clip = laserSound;
                 audioSource.Play();

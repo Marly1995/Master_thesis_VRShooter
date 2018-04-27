@@ -17,16 +17,6 @@ public class FriendStateManager : MonoBehaviour
     Ray ray;
     RaycastHit hit;
 
-    private void Start()
-    {
-        int index = 0;
-        foreach (EnemyBehaviours item in targets)
-        {
-            item.personalIndex = index;
-            index++;
-        }
-    }
-
     public Transform SearchForTarget(Vector3 position)
     {
         Transform newTarget = null;

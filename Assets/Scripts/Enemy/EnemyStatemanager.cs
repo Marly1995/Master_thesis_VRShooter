@@ -26,10 +26,14 @@ public class EnemyStatemanager : MonoBehaviour
     {
         Transform newTarget = null;
         float closest = Mathf.Infinity;
+        float playerDist = Vector3.Distance(player.transform.position, position);
+        newTarget = player.transform;
         foreach(FriendlyBehaviour tar in targets)
         {
             float dist = Vector3.Distance(tar.transform.position, position);
-            if (dist < closest && dist < sightRadius)
+            if (dist < playerDist && 
+                dist < closest && 
+                dist < sightRadius)
             {
                 if (tar.State == FriendState.Sneak ||
                     tar.State == FriendState.Cover)

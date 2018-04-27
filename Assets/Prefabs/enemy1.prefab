@@ -1728,13 +1728,13 @@ MonoBehaviour:
   laserSound: {fileID: 8300000, guid: dc309e2fa65d1b649a2614552703dd98, type: 3}
   state: 0
   manager: {fileID: 0}
-  hitParticles: {fileID: 1974713409960000, guid: e9892c571799be846a942128af414ddf,
-    type: 2}
+  bullet: {fileID: 1483559971694306, guid: d9634e6dad86ee648b98aa7c2b7db243, type: 2}
   hitTrail: {fileID: 122648, guid: 11530f2b0a0cd2442949827ecbb622f2, type: 2}
   target: {fileID: 0}
   patrolPositions: []
   fireRate: 1
   rotationSpeed: 1
+  shotSpeed: 5
   robotRenderer: {fileID: 0}
 --- !u!114 &114829103933970432
 MonoBehaviour:

@@ -33,7 +33,7 @@ public class FriendlyBehaviour : MonoBehaviour
     bool gunShown;
     MeshRenderer gunRenderer;
     Transform barrell;
-    public GameObject hitParticles;
+    public GameObject bullet;
     public GameObject hitTrail;
 
     public Transform target;
@@ -42,6 +42,7 @@ public class FriendlyBehaviour : MonoBehaviour
     bool hasCoverPoint = false;
 
     public float fireRate;
+    public float shotSpeed;
     public float rotationSpeed;
     float shotTime;
     
@@ -51,6 +52,8 @@ public class FriendlyBehaviour : MonoBehaviour
     FriendlyBehaviour reviveTarget;
 
     public bool downed = false;
+
+    public float targetSearchTimer = 1.0f;
 
     private void Start()
     {
@@ -64,6 +67,16 @@ public class FriendlyBehaviour : MonoBehaviour
 
     private void Update()
     {
+        targetSearchTimer -= Time.deltaTime;
+        if (targetSearchTimer <= 0f && target == null)
+        {
+            targetSearchTimer = 1.0f;
+            target = manager.SearchForTarget(transform.position);
+            if (target != null)
+            {
+                state = FriendState.Shooting;
+            }
+        }
         if (downed)
         {
             state = FriendState.Downed;
@@ -148,6 +161,7 @@ public class FriendlyBehaviour : MonoBehaviour
                 controller.Agent.isStopped = true;
                 controller.Animator.SetBool("Dead", true);
                 downed = true;
+                Invoke("GetUp", 3.0f);
                 break;
             case FriendState.Reviving:
                 if (gunShown)
@@ -167,6 +181,12 @@ public class FriendlyBehaviour : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    void GetUp()
+    {
+        state = FriendState.CoverShooting;
+        downed = false;
     }
 
     public void RemoveCurrentCover()
@@ -221,22 +241,9 @@ public class FriendlyBehaviour : MonoBehaviour
             if (shotTime <= 0f)
             {
                 Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-2f, 2f), Random.Range(-1f, 1f))) - barrell.position;
-                Ray ray = new Ray(barrell.position, shotDir);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    GameObject particles = Instantiate(hitParticles, hit.point, Quaternion.identity);
-                    Destroy(particles, 0.4f);
-                    if (hit.collider.tag == "Enemy")
-                    {
-                        hit.collider.gameObject.GetComponent<EnemyBehaviours>().points = 1000;
-                        hit.collider.gameObject.GetComponent<EnemyBehaviours>().State = EnemyState.Dead;
-                    }
-                }
-                GameObject trail = Instantiate(hitTrail);
-                VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
-                vol.StartPos = barrell.position;
-                vol.EndPos = hit.point;
+
+                GameObject bul = Instantiate(bullet, barrell.position, Quaternion.identity);
+                bul.GetComponent<Rigidbody>().AddForce(shotDir * shotSpeed, ForceMode.Impulse);
                 shotTime = fireRate;
                 audioSource.clip = laserSound;
                 audioSource.Play();

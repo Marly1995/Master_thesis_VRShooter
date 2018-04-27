@@ -1724,12 +1724,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserSound: {fileID: 8300000, guid: dc309e2fa65d1b649a2614552703dd98, type: 3}
   state: 0
-  hitParticles: {fileID: 1974713409960000, guid: e9892c571799be846a942128af414ddf,
-    type: 2}
+  bullet: {fileID: 1483559971694306, guid: d9634e6dad86ee648b98aa7c2b7db243, type: 2}
   hitTrail: {fileID: 1362479706458640, guid: 6244f880bcc76cb4a882548feb04904d, type: 2}
   target: {fileID: 0}
   coverPositions: []
   fireRate: 1
+  shotSpeed: 5
   rotationSpeed: 1
   downed: 0
 --- !u!114 &114688700978070272

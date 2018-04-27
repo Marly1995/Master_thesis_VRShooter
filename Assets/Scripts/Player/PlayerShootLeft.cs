@@ -27,9 +27,15 @@ public class PlayerShootLeft : MonoBehaviour {
     RaycastHit hit;
 
     bool grabbed = true;
+    bool down = false;
 
     void HandleInput()
     {
+        if (WorldState.PlayerDown && !down)
+        {
+            down = true;
+            StartCoroutine(DownTime());
+        }
         if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger))
         {
             grabbed = true;
@@ -78,6 +84,10 @@ public class PlayerShootLeft : MonoBehaviour {
             {
                 hit.collider.gameObject.GetComponent<EnemyDie>().Die();
             }
+            if (hit.collider.tag == "bullet")
+            {
+                Destroy(hit.collider.gameObject);
+            }
         }
         GameObject trail = Instantiate(hitTrail);
         VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
@@ -108,5 +118,11 @@ public class PlayerShootLeft : MonoBehaviour {
                 yield return new WaitForSeconds(0.001f);
             }
         }
+    }
+
+    IEnumerator DownTime()
+    {
+        yield return new WaitForSeconds(3.0f);
+        down = false;
     }
 }

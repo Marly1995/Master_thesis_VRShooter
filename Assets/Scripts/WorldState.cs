@@ -40,4 +40,11 @@ public class WorldState
         get { return waves; }
         set { waves = value; }
     }
+
+    private static bool playerDown;
+    public static bool PlayerDown
+    {
+        get { return playerDown; }
+        set { playerDown = value; }
+    }
 }
