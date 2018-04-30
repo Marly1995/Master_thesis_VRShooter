@@ -5,57 +5,61 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Imports/OVRHarness/Scenes/Loading.unity
+    guid: 0e94513ae709c964da9fc34e03e72913
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Cameras/Multiple Cameras/Multiple Cameras.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Cameras/Per-Eye Cameras/Per-Eye Cameras.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/First Person/Crosshairs/Crosshairs.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/First Person/Locomotion/Teleport/Teleport.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/First Person/Mirror/Mirror.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/First Person/Outdoor Motion.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/First Person/Scale.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/First Person/Stairs/Stairs.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Input/Input Tester/Input Tester.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Input/Keyboard/Keyboard.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Rendering/Movie Player/Movie Player.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Rendering/Render Frame Rate/Render Frame Rate.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/Rendering/Surface Detail/Surface Detail.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/UI/Overlay/OverlayUIDemo.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/UI/Pointers/Pointers.unity
+  - enabled: 0
+    path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Imports/SampleScenes/UI/Pointers - Gaze Click/Pointers - Gaze Click.unity
-    guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Imports/OVRHarness/Scenes/StartUp.unity
-    guid: 00000000000000000000000000000000
+    guid: a899a6e5d1e3813459952712ee7aaac0
+  - enabled: 1
+    path: Assets/space scene starting.unity
+    guid: 0e8cd845a9ee96b43abadc401e402958
+  m_configObjects: {}

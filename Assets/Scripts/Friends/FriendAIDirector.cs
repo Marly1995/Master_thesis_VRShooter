@@ -47,6 +47,8 @@ public class FriendAIDirector : MonoBehaviour
     public AudioClip takethemoutfromafar;
     #endregion
 
+    public bool tutorial;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -54,33 +56,36 @@ public class FriendAIDirector : MonoBehaviour
 
     private void Update()
     {
-        if (commandGiven)
+        if (!tutorial)
         {
-            switch (command)
+            if (commandGiven)
             {
-                case Command.Follow:
-                    Follow();
-                    break;
-                case Command.Rush:
-                    Rush();
-                    break;
-                case Command.CeaseFire:
-                    CeaseFire();
-                    break;
-                case Command.ResumeFire:
-                    ResumeFire();
-                    break;
-                case Command.Sneak:
-                    Sneak();
-                    break;
-                case Command.Snipe:
-                    Snipe();
-                    break;
-                case Command.Revive:
-                    Revive();
-                    break;
+                switch (command)
+                {
+                    case Command.Follow:
+                        Follow();
+                        break;
+                    case Command.Rush:
+                        Rush();
+                        break;
+                    case Command.CeaseFire:
+                        CeaseFire();
+                        break;
+                    case Command.ResumeFire:
+                        ResumeFire();
+                        break;
+                    case Command.Sneak:
+                        Sneak();
+                        break;
+                    case Command.Snipe:
+                        Snipe();
+                        break;
+                    case Command.Revive:
+                        Revive();
+                        break;
+                }
+                commandGiven = false;
             }
-            commandGiven = false;
         }
     }
 

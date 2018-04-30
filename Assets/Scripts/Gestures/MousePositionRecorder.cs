@@ -103,7 +103,7 @@ public class MousePositionRecorder : MonoBehaviour
         {
             constantPositions.Add(rightHand.localPosition);
         }
-        if (Input.GetKeyDown(KeyCode.Period))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             SaveDatabase();
         }
@@ -178,6 +178,7 @@ public class MousePositionRecorder : MonoBehaviour
         }
         Gesture gesture = new Gesture(points, name, gestureIndex[name]);
         storedGestures.Add(gesture);
+        Debug.Log("Gesture Replaced");
     }
 
     //public void StoreGesture()

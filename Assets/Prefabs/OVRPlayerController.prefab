@@ -1579,6 +1579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00473642477ce3b41b38ea58e0c97cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grey: {fileID: 0}
+  gunTex: {fileID: 0}
+  lazer: {fileID: 0}
+  disabled: {fileID: 0}
   lazerShot: {fileID: 82833897535820628}
   fireRate: 0.3
   gun: {fileID: 1331628961981254}
@@ -1693,6 +1697,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6ba5aa3844c6484a9765a4d2c5a0620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grey: {fileID: 0}
+  gunTex: {fileID: 0}
   lazerShot: {fileID: 82048842649321442}
   fireRate: 0.3
   gun: {fileID: 1825685110929864}

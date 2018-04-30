@@ -33,10 +33,6 @@ public class Bullet : MonoBehaviour
         {
             collision.gameObject.GetComponent<FriendlyBehaviour>().State = FriendState.Downed;
         }
-        if (collision.transform.tag == "Enemy")
-        {
-            collision.gameObject.GetComponent<EnemyBehaviours>().State = EnemyState.Dead;
-        }
         if (collision.transform.tag == "MainCamera")
         {
             WorldState.PlayerDown = true;

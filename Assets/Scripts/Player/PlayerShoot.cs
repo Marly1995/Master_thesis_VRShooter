@@ -5,6 +5,12 @@ using UnityEngine.PostProcessing;
 
 public class PlayerShoot : MonoBehaviour
 {
+    public Texture grey;
+    public Texture gunTex;
+
+    public AudioClip lazer;
+    public AudioClip disabled;
+
     public AudioSource lazerShot;
     public float fireRate;
     float shotTimer;
@@ -42,6 +48,10 @@ public class PlayerShoot : MonoBehaviour
     {
         if (WorldState.PlayerDown && !down)
         {
+            gunRenderer.material.SetTexture("_MainTex", grey);
+            lazerShot.clip = disabled;
+            lazerShot.volume = 1.0f;
+            lazerShot.Play();
             down = true;
             noShoot.SetActive(true);
             noShoot2.SetActive(true);
@@ -119,6 +129,8 @@ public class PlayerShoot : MonoBehaviour
         VolumetricLines.VolumetricLineBehavior vol = trail.GetComponent<VolumetricLines.VolumetricLineBehavior>();
         vol.StartPos = barrellStart.position;
         vol.EndPos = barrelEnd.position;
+        lazerShot.clip = lazer;
+        lazerShot.volume = 0.5f;
         lazerShot.Play();
     }
 
@@ -166,6 +178,7 @@ public class PlayerShoot : MonoBehaviour
     IEnumerator DownTime()
     {
         yield return new WaitForSeconds(3.0f);
+        gunRenderer.material.SetTexture("_MainTex", gunTex);
         down = false;
         WorldState.PlayerDown = false;
         noShoot.SetActive(false);

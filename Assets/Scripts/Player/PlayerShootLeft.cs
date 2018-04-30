@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShootLeft : MonoBehaviour {
+public class PlayerShootLeft : MonoBehaviour
+{
+    public Texture grey;
+    public Texture gunTex;
 
     public AudioSource lazerShot;
 
@@ -33,6 +36,7 @@ public class PlayerShootLeft : MonoBehaviour {
     {
         if (WorldState.PlayerDown && !down)
         {
+            gunRenderer.material.SetTexture("_MainTex", grey);
             down = true;
             StartCoroutine(DownTime());
         }
@@ -52,11 +56,14 @@ public class PlayerShootLeft : MonoBehaviour {
         }
         if (grabbed)
         {
-            if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) &&
-            shotTimer <= 0)
+            if (!down)
             {
-                Fire();
-                shotTimer = fireRate;
+                if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) &&
+                shotTimer <= 0)
+                {
+                    Fire();
+                    shotTimer = fireRate;
+                }
             }
         }
     }
@@ -123,6 +130,7 @@ public class PlayerShootLeft : MonoBehaviour {
     IEnumerator DownTime()
     {
         yield return new WaitForSeconds(3.0f);
+        gunRenderer.material.SetTexture("_MainTex", gunTex);
         down = false;
     }
 }

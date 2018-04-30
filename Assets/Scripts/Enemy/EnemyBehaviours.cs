@@ -58,6 +58,7 @@ public class EnemyBehaviours : MonoBehaviour
     public SkinnedMeshRenderer robotRenderer;
     float deathtime = 2.0f;
     bool dead;
+    bool isDead = false;
 
     float targetSearchTime = 2.0f;
 
@@ -75,6 +76,10 @@ public class EnemyBehaviours : MonoBehaviour
 
     private void Update()
     {
+        if (isDead)
+        {
+            state = EnemyState.Dead;
+        }
         if (Vector3.Distance(manager.player.transform.position, transform.position) <= 50f)
         {
             targetSearchTime -= Time.deltaTime;
@@ -114,6 +119,11 @@ public class EnemyBehaviours : MonoBehaviour
                     controller.Animator.SetBool("Shoot", false);
                     if (!hasCoverPoint)
                     { TakeCover(); }
+                    if (controller.goal.position == null)
+                    {
+                        state = EnemyState.CoverShooting;
+                        break;
+                    }
                     if (Vector3.Distance(controller.transform.position, controller.goal.position) <= 1f)
                     {
                         controller.Agent.isStopped = true;
@@ -162,6 +172,7 @@ public class EnemyBehaviours : MonoBehaviour
                 case EnemyState.Dead:
                     controller.Agent.isStopped = true;
                     controller.Animator.SetBool("Dead", true);
+                    isDead = true;
                     Die();
                     break;
             }
