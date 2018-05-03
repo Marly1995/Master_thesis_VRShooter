@@ -28,6 +28,13 @@ public class DataLogger : MonoBehaviour
         csvWriter.NextRecord();
     }
 
+    public void FixedUpdate()
+    {
+        data = new TransformData(0f, "", false);
+        csvWriter.WriteRecord(data);
+        csvWriter.NextRecord();
+    }
+
     public void Log(string value, bool continuous)
     {
         data = new TransformData(Time.time, value, continuous);
