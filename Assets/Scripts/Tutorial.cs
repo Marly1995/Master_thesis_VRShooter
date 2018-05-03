@@ -13,6 +13,8 @@ public class Tutorial : MonoBehaviour
 
     public VideoPlayer player;
 
+    public string current;
+
     private void Start()
     {
         gestures = new List<int>();
@@ -24,13 +26,14 @@ public class Tutorial : MonoBehaviour
         }
     }
 
-    void ShowNext()
+    public void ShowNext()
     {
         int index = ChooseNext();
         int next = gestures[index];
         gestures.RemoveAt(index);
         player.clip = clips[next];
         StartCoroutine(DelayedPlay(1.0f));
+        current = clips[next].name;
     }
 
     int ChooseNext()
@@ -40,7 +43,11 @@ public class Tutorial : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        start = true;
+        if (!start)
+        {
+            ShowNext();
+            start = true;
+        }
     }
 
     IEnumerator DelayedPlay(float delay)

@@ -6,10 +6,10 @@ using System.IO;
 public class DataLogger : MonoBehaviour
 {
     [SerializeField]
-    string number;
+    string number = "one";
 
-    public string directory = "C:\\Users\\marlon\\Documents\\GitHub\\GalleryData\\";
-    public string filename = "\\globalData";
+    string directory = "C:\\Users\\Computing\\Documents\\GitHub\\studyLogs\\";
+    string filename = "\\data";
 
     TextWriter textWriter;
     CsvWriter csvWriter;

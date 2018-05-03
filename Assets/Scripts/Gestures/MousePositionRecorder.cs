@@ -19,6 +19,9 @@ using System.ComponentModel;
 
 public class MousePositionRecorder : MonoBehaviour
 {
+    public bool replaceBuild;
+    Tutorial tut;
+
     DataLogger logger;
     //public Button StoreGestureBtn;
     //public Button LearnGesturesBtn;
@@ -66,6 +69,7 @@ public class MousePositionRecorder : MonoBehaviour
 
     void Start ()
     {
+        tut = GetComponent<Tutorial>();
         friendAI = GetComponent<FriendAIDirector>();
         logger = GetComponent<DataLogger>();
 
@@ -456,8 +460,16 @@ public class MousePositionRecorder : MonoBehaviour
             if (item.Value == decision)
             { value = item.Key; }
         }
-        friendAI.RecieveCommand(value);
         logger.Log(value, false);
+        if (tut.current == value)
+        {
+            friendAI.RecieveCommand(value);
+            tut.ShowNext();
+            if (replaceBuild)
+            {
+                ReplaceGesture(value);
+            }
+        }
         Debug.Log("Did you write a: " + value + "?");
     }
 
