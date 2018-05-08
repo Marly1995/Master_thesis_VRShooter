@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using UnityEngine.UI;
 
 public class Tutorial : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class Tutorial : MonoBehaviour
     public VideoPlayer player;
 
     public string current;
+
+    public Text text;
 
     private void Start()
     {
@@ -29,11 +32,20 @@ public class Tutorial : MonoBehaviour
     public void ShowNext()
     {
         int index = ChooseNext();
-        int next = gestures[index];
-        gestures.RemoveAt(index);
-        player.clip = clips[next];
-        StartCoroutine(DelayedPlay(1.0f));
-        current = clips[next].name;
+        if (gestures.Count > 0)
+        {
+            int next = gestures[index];
+            gestures.RemoveAt(index);
+            player.clip = clips[next];
+            StartCoroutine(DelayedPlay(1.0f));
+            current = clips[next].name;
+            text.text = current;
+        }
+        else
+        {
+            text.text = "Finished!";
+            player.clip = null;
+        }
     }
 
     int ChooseNext()

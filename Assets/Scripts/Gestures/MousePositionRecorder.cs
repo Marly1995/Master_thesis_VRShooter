@@ -57,7 +57,7 @@ public class MousePositionRecorder : MonoBehaviour
     ITopology vector;
     
     private int index;
-
+    
     public string databaseFile;
     public GestureDatabase database;
 
@@ -143,6 +143,7 @@ public class MousePositionRecorder : MonoBehaviour
             if (storedGestures[i].name == name)
             {
                 removeIndex = i;
+                break;
             }
         }
         storedGestures.RemoveAt(removeIndex);
@@ -461,15 +462,15 @@ public class MousePositionRecorder : MonoBehaviour
             { value = item.Key; }
         }
         logger.Log(value, false);
-        if (tut.current == value)
-        {
+        //if (tut.current == value)
+        //{
             friendAI.RecieveCommand(value);
-            tut.ShowNext();
-            if (replaceBuild)
-            {
+            //tut.ShowNext();
+           // if (replaceBuild)
+            //{
                 ReplaceGesture(value);
-            }
-        }
+//}
+       // }
         Debug.Log("Did you write a: " + value + "?");
     }
 
@@ -529,7 +530,7 @@ public class MousePositionRecorder : MonoBehaviour
     {
         database.CheckDatabaseExists(databaseFile);
         database.Gestures = new BindingList<Gesture>(storedGestures);
-        var stream = new FileStream(databaseFile, FileMode.Open);
+        var stream = new FileStream(databaseFile, FileMode.Create);
         database.Save(stream);
         stream.Close();
         Debug.Log("Database Saved!");
