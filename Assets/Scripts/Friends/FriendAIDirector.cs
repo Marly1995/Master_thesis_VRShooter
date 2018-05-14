@@ -23,7 +23,7 @@ public class FriendAIDirector : MonoBehaviour
 
     public Command command;
     
-    bool commandGiven = true;
+    bool commandGiven = false;
 
     public float sightRadius = 30f;
     public float snipingSightRadius = 60f;
@@ -48,6 +48,9 @@ public class FriendAIDirector : MonoBehaviour
     #endregion
 
     public bool tutorial;
+	
+	float runSpeed = 8.0f;
+	float walkSpeed = 6.0f;
 
     private void Start()
     {
@@ -77,12 +80,6 @@ public class FriendAIDirector : MonoBehaviour
                     case Command.Sneak:
                         Sneak();
                         break;
-                    case Command.Snipe:
-                        Snipe();
-                        break;
-                    case Command.Revive:
-                        Revive();
-                        break;
                 }
                 commandGiven = false;
             }
@@ -102,17 +99,11 @@ public class FriendAIDirector : MonoBehaviour
             case "startFiring":
                 command = Command.ResumeFire;
                 break;
-            case "ceaseFire":
+            case "ceaseFiring":
                 command = Command.CeaseFire;
                 break;
             case "sneak":
                 command = Command.Sneak;
-                break;
-            case "danger":
-                command = Command.Snipe;
-                break;
-            case "revive":
-                command = Command.Revive;
                 break;
         }
         commandGiven = true;
@@ -129,6 +120,7 @@ public class FriendAIDirector : MonoBehaviour
         {
             instance.RemoveCurrentCover();
             instance.State = FriendState.TakingCover;
+			instance.SetSpeed(walkSpeed);
         }
         audioSource.clip = follow;
         audioSource.Play();
@@ -145,6 +137,7 @@ public class FriendAIDirector : MonoBehaviour
         {
             instance.RemoveCurrentCover();
             instance.State = FriendState.TakingCover;
+			instance.SetSpeed(runSpeed);
         }
         audioSource.clip = rush;
         audioSource.Play();

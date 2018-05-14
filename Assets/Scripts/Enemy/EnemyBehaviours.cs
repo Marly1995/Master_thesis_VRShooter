@@ -119,7 +119,7 @@ public class EnemyBehaviours : MonoBehaviour
                     controller.Animator.SetBool("Shoot", false);
                     if (!hasCoverPoint)
                     { TakeCover(); }
-                    if (controller.goal.position == null)
+				if (controller.goal.position == null)
                     {
                         state = EnemyState.CoverShooting;
                         break;
@@ -234,6 +234,7 @@ public class EnemyBehaviours : MonoBehaviour
 
                 shotTime = fireRate;
                 audioSource.clip = laserSound;
+				audioSource.pitch = Random.Range(0.5f, 1.0f);
                 audioSource.Play();
             }
         }

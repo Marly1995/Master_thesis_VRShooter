@@ -107,6 +107,7 @@ PlayerSettings:
   xboxOneLoggingLevel: 1
   xboxOneDisableEsram: 0
   xboxOnePresentImmediateThreshold: 0
+  switchQueueCommandMemory: 0
   videoMemoryForVertexBuffers: 0
   psp2PowerMode: 0
   psp2AcquireBGM: 1
@@ -154,6 +155,8 @@ PlayerSettings:
   applicationIdentifier:
     '': com.oculus.UnitySample
     Android: com.oculus.SampleFramework
+    Metro: com.oculus.UnitySample
+    PS4: com.oculus.UnitySample
     Standalone: unity.Oculus.Oculus Sample Framework
     Tizen: com.oculus.SampleFramework
     iOS: com.oculus.SampleFramework
@@ -237,6 +240,8 @@ PlayerSettings:
   appleDeveloperTeamID: 
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
+  iOSManualSigningProvisioningProfileType: 0
+  tvOSManualSigningProvisioningProfileType: 0
   appleEnableAutomaticSigning: 0
   iOSRequireARKit: 0
   appleEnableProMotion: 0
@@ -278,7 +283,7 @@ PlayerSettings:
   m_BuildTargetGraphicsAPIs:
   - m_BuildTarget: WindowsStandaloneSupport
     m_APIs: 02000000
-    m_Automatic: 0
+    m_Automatic: 1
   - m_BuildTarget: AndroidPlayer
     m_APIs: 08000000
     m_Automatic: 0
@@ -288,7 +293,7 @@ PlayerSettings:
     m_Devices:
     - Oculus
   - m_BuildTarget: Metro
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices: []
   - m_BuildTarget: N3DS
     m_Enabled: 0
@@ -297,7 +302,7 @@ PlayerSettings:
     m_Enabled: 0
     m_Devices: []
   - m_BuildTarget: PS4
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices:
     - PlayStationVR
   - m_BuildTarget: PSM

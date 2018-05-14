@@ -8,7 +8,7 @@ public class DataLogger : MonoBehaviour
     [SerializeField]
     string number = "one";
 
-    string directory = "C:\\Users\\Computing\\Documents\\GitHub\\studyLogs\\";
+	string directory = "C:\\Users\\marlon\\Documents\\GitHub\\StudyLogs";
     string filename = "\\data";
 
     TextWriter textWriter;

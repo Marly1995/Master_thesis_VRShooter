@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 
 using Accord.Statistics.Models.Markov;
 using Accord.Statistics.Models.Markov.Topology;
@@ -359,7 +358,7 @@ public class MousePositionRecorder : MonoBehaviour
         Debug.Log("Sequence Learned!");
     }
 
-    public void ContinuousCheckRecognized()
+    public bool ContinuousCheckRecognized()
     {
         Debug.Log("ContinuousChecking!");
         double[][] points = new double[constantPositions.Count][];
@@ -395,10 +394,10 @@ public class MousePositionRecorder : MonoBehaviour
         double bestFit = Mathf.NegativeInfinity;
         for (int i = 0; i < likelihoods.Length; i++)
         {
+			//Debug.Log(scores[i]);
             if (likelihoods[i] > bestFit)
             { bestFit = likelihoods[i]; }
         }
-        Debug.Log(bestFit);
         if (bestFit >= 0)
         {
             int decision = hmm.Decide(points);
@@ -411,7 +410,9 @@ public class MousePositionRecorder : MonoBehaviour
             friendAI.RecieveCommand(value);
             logger.Log(value, true);
             Debug.Log("Did you write a: " + value + "?");
+			return true;
         }
+		return false;
     }
 
     public void CheckRecognized()
@@ -463,14 +464,14 @@ public class MousePositionRecorder : MonoBehaviour
         }
         logger.Log(value, false);
         //if (tut.current == value)
-        //{
+        {
             friendAI.RecieveCommand(value);
             //tut.ShowNext();
-           // if (replaceBuild)
-            //{
-                ReplaceGesture(value);
-//}
-       // }
+            //if (replaceBuild)
+            
+                //ReplaceGesture(value);
+			
+        }
         Debug.Log("Did you write a: " + value + "?");
     }
 

@@ -131,6 +131,7 @@ public class PlayerShoot : MonoBehaviour
         vol.EndPos = barrelEnd.position;
         lazerShot.clip = lazer;
         lazerShot.volume = 0.5f;
+		lazerShot.pitch = Random.Range(0.5f, 1.0f);
         lazerShot.Play();
     }
 

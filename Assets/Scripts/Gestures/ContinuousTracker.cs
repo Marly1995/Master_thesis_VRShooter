@@ -40,35 +40,37 @@ public class ContinuousTracker : MonoBehaviour
         }
         else
         {
-            positions.Enqueue(rec.rightHand.position);
-            if (positions.Count > 10)
-            {
-                positions.Dequeue();
-            }
+			if (!started)
+			{
+				positions.Enqueue(rec.rightHand.position);
+				if (positions.Count > 6)
+				{
+					positions.Dequeue();
+				}
 
 
-            vels.Enqueue((rec.rightHand.position - lastPos).magnitude);
-            lastPos = rec.rightHand.position;
-            if (vels.Count > 10)
-            {
-                vels.Dequeue();
-            }
+				vels.Enqueue((rec.rightHand.position - lastPos).magnitude);
+				lastPos = rec.rightHand.position;
+				if (vels.Count > 6)
+				{
+					vels.Dequeue();
+				}
 
-            if (Time.time - checkTime >= lastTime)
-            {
-                lastTime = Time.time;
-                if (!started)
-                {
-                    //if (!VelocityCheck())
-                    {
-                        if (!PositionCheck())
-                        {
-                            rec.BeginRecording();
-                            StartCoroutine(GestureStarted());
-                        }
-                    }
-                }
-            }
+				if (Time.time - checkTime >= lastTime)
+				{
+					lastTime = Time.time;
+					if (!PositionCheck())
+					{
+						rec.BeginRecording();
+						StartCoroutine(GestureStarted());
+					}
+				}
+			}
+			else
+			{
+				positions.Clear();
+				vels.Clear();
+			}
         }
     }
 
@@ -77,13 +79,14 @@ public class ContinuousTracker : MonoBehaviour
         rec.continuousGesturing = true;
         started = true;
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.2f);
 
-        rec.continuousGesturing = false;
-        rec.ContinuousCheckRecognized();
-        rec.constantPositions.Clear();
-        started = false;
-        rec.EndRecording();
+        bool hit = rec.ContinuousCheckRecognized();
+		
+			rec.continuousGesturing = false;
+			rec.constantPositions.Clear();
+			started = false;
+			rec.EndRecording();
     }
 
     bool VelocityCheck()

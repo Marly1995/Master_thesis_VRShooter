@@ -68,9 +68,9 @@ public class FriendlyBehaviour : MonoBehaviour
     private void Update()
     {
         targetSearchTimer -= Time.deltaTime;
-        if (targetSearchTimer <= 0f && target == null)
+        if (targetSearchTimer <= 0f || target == null)
         {
-            targetSearchTimer = 1.0f;
+            targetSearchTimer = 8.0f;
             target = manager.SearchForTarget(transform.position);
             if (target != null)
             {
@@ -240,16 +240,22 @@ public class FriendlyBehaviour : MonoBehaviour
 
             if (shotTime <= 0f)
             {
-                Vector3 shotDir = (target.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-2f, 2f), Random.Range(-1f, 1f))) - barrell.position;
+                Vector3 shotDir = (target.position + new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(-1f, 1f), Random.Range(-0.4f, 0.4f))) - barrell.position;
 
                 GameObject bul = Instantiate(bullet, barrell.position, Quaternion.identity);
                 bul.GetComponent<Rigidbody>().AddForce(shotDir * shotSpeed, ForceMode.Impulse);
                 shotTime = fireRate;
                 audioSource.clip = laserSound;
+				audioSource.pitch = Random.Range(0.5f, 1.0f);
                 audioSource.Play();
             }
         }
     }
+	
+	public void SetSpeed(float speed)
+	{
+		controller.Agent.speed = speed;
+	}
 
     IEnumerator DissolveOut()
     {

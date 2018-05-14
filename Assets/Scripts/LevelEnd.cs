@@ -6,6 +6,7 @@ public class LevelEnd : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        WorldState.Score -= Mathf.FloorToInt(Time.time * 50);
+		if (other.tag == "Player" || other.tag == "MainCamera")
+			WorldState.Score -= Mathf.FloorToInt(Time.time * 50);
     }
 }
