@@ -467,10 +467,10 @@ public class MousePositionRecorder : MonoBehaviour
         {
             friendAI.RecieveCommand(value);
             //tut.ShowNext();
-            //if (replaceBuild)
-            
-                //ReplaceGesture(value);
-			
+            if (replaceBuild)
+            {
+                ReplaceGesture(value);
+			}			
         }
         Debug.Log("Did you write a: " + value + "?");
     }

@@ -43,7 +43,7 @@ public class ContinuousTracker : MonoBehaviour
 			if (!started)
 			{
 				positions.Enqueue(rec.rightHand.position);
-				if (positions.Count > 6)
+				if (positions.Count > 4)
 				{
 					positions.Dequeue();
 				}
@@ -51,11 +51,11 @@ public class ContinuousTracker : MonoBehaviour
 
 				vels.Enqueue((rec.rightHand.position - lastPos).magnitude);
 				lastPos = rec.rightHand.position;
-				if (vels.Count > 6)
+				if (vels.Count > 4)
 				{
 					vels.Dequeue();
 				}
-
+                
 				if (Time.time - checkTime >= lastTime)
 				{
 					lastTime = Time.time;
@@ -87,6 +87,8 @@ public class ContinuousTracker : MonoBehaviour
 			rec.constantPositions.Clear();
 			started = false;
 			rec.EndRecording();
+            positions.Clear();
+            vels.Clear();
     }
 
     bool VelocityCheck()

@@ -53,7 +53,7 @@ public class FriendlyBehaviour : MonoBehaviour
 
     public bool downed = false;
 
-    public float targetSearchTimer = 1.0f;
+    public float targetSearchTimer = 8.0f;
 
     private void Start()
     {
@@ -72,10 +72,6 @@ public class FriendlyBehaviour : MonoBehaviour
         {
             targetSearchTimer = 8.0f;
             target = manager.SearchForTarget(transform.position);
-            if (target != null)
-            {
-                state = FriendState.Shooting;
-            }
         }
         if (downed)
         {
